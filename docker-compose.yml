@@ -1,0 +1,51 @@
+# C:\foodapp-php\docker-compose.yml (Temporary - no healthcheck dependency)
+networks:
+    foodapp_network:
+        driver: bridge
+
+services:
+    # --- LARAVEL APP SERVICE ---
+    laravel_app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: foodapp_laravel_dev
+        ports:
+            - "8000:8000"
+        volumes:
+            - .:/var/www/html
+            - /var/www/html/vendor
+        environment:
+            - DB_CONNECTION=sqlsrv
+            - DB_HOST=db
+            - DB_PORT=1433
+            - DB_DATABASE=MyFoodApiDb
+            - DB_USERNAME=sa
+            - DB_PASSWORD=${SA_PASSWORD}
+            - APP_ENV=local
+            - APP_DEBUG=true
+        depends_on:
+            - db  # Simple dependency without healthcheck
+        networks:
+            - foodapp_network
+
+    # --- SQL SERVER DATABASE SERVICE ---
+    db:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        container_name: foodapp_mssql_db
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=${SA_PASSWORD}
+            - MSSQL_PID=Developer
+        ports:
+            - "1433:1433"
+        volumes:
+            - sqlserver_data:/var/opt/mssql
+        networks:
+            foodapp_network:
+                aliases:
+                    - db
+        # Removed healthcheck temporarily
+
+volumes:
+    sqlserver_data:
