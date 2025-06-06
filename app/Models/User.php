@@ -11,8 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable; // Temporarily just HasFactory, Notifiable
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
 
     public const ROLE_ADMIN = 'admin';
