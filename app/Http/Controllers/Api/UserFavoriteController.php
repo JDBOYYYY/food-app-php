@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\ProductResource; // To return list of favorite products
 use Illuminate\Http\Response;
 
@@ -52,7 +53,11 @@ class UserFavoriteController extends Controller
     {
         $user = $request->user();
 
-        $user->favoriteProducts()->detach($product->Id);
+        // Detach may fail with custom pivot models, so remove directly
+        \DB::table('Favorites')
+            ->where('UserId', $user->id)
+            ->where('ProductId', $product->Id)
+            ->delete();
 
         return response()->noContent();
     }
