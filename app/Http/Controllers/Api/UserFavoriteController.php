@@ -12,20 +12,16 @@ class UserFavoriteController extends Controller
 {
     public function __construct()
     {
-        // All actions here require an authenticated user
-        // $this->middleware('auth:sanctum'); // Add when Sanctum is ready
+        $this->middleware('auth:sanctum');
     }
 
     /**
      * List the authenticated user's favorite products.
      * GET /api/favorites
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-        // If testing without auth:
-        if (!$user) { $user = \App\Models\User::where('email', 'user@example.com')->first(); } // Temporary
-        if (!$user) { return response()->json(['message' => 'User not found for favorites list.'], 404); }
+        $user = $request->user();
 
 
         // Eager load what ProductResource might need (category, restaurant)
@@ -37,12 +33,9 @@ class UserFavoriteController extends Controller
      * Add a product to the authenticated user's favorites.
      * POST /api/products/{product}/favorite
      */
-    public function store(Request $request, Product $product) // Product via route-model binding
+    public function store(Request $request, Product $product)
     {
-        $user = Auth::user();
-        // If testing without auth:
-        if (!$user) { $user = \App\Models\User::where('email', 'user@example.com')->first(); } // Temporary
-        if (!$user) { return response()->json(['message' => 'User not found to add favorite.'], 404); }
+        $user = $request->user();
 
         // Attach if not already attached. syncWithoutDetaching adds if not present.
         // The second argument to attach/sync is for extra pivot data.
@@ -55,12 +48,9 @@ class UserFavoriteController extends Controller
      * Remove a product from the authenticated user's favorites.
      * DELETE /api/products/{product}/unfavorite  (or /api/favorites/{product})
      */
-    public function destroy(Request $request, Product $product) // Product via route-model binding
+    public function destroy(Request $request, Product $product)
     {
-        $user = Auth::user();
-        // If testing without auth:
-        if (!$user) { $user = \App\Models\User::where('email', 'user@example.com')->first(); } // Temporary
-        if (!$user) { return response()->json(['message' => 'User not found to remove favorite.'], 404); }
+        $user = $request->user();
 
         $user->favoriteProducts()->detach($product->Id);
 
