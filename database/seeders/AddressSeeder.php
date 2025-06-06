@@ -14,6 +14,7 @@ class AddressSeeder extends Seeder
         if ($user) { // Check if user was found
             Address::create([
                 'Street' => '123 Main St',
+                'Apartment' => 'Apt 1',
                 'City' => 'Anytown',
                 'PostalCode' => '12345',
                 'Country' => 'USA',
@@ -21,6 +22,7 @@ class AddressSeeder extends Seeder
             ]);
             Address::create([
                 'Street' => '456 Oak Ave',
+                'Apartment' => 'Suite 200',
                 'City' => 'Otherville',
                 'PostalCode' => '67890',
                 'Country' => 'USA',
