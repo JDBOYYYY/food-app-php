@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('Addresses', function (Blueprint $table) { // Your table name 'Addresses' is fine
             $table->id('Id'); // Your primary key 'Id' for this table is fine
             $table->string('Street', 100);
+            $table->string('Apartment')->nullable();
             $table->string('City', 50);
             $table->string('PostalCode', 20);
             $table->string('Country', 50);
