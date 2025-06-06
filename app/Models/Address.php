@@ -35,6 +35,7 @@ class Address extends Model
      */
     protected $fillable = [
         'Street',
+        'Apartment',
         'City',
         'PostalCode',
         'Country',

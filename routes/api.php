@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductReviewController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\OrderItemController;
+use App\Http\Controllers\Api\AuthController;
+
 
 // Test route
 Route::get('/ping', function () {
@@ -18,26 +20,8 @@ Route::get('/ping', function () {
 });
 
 // Public routes (no authentication required)
-Route::post('/login', function (Request $request) {
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-        'device_name' => 'required|string',
-    ]);
-    
-    $user = \App\Models\User::where('email', $request->email)->first();
-    
-    if (! $user || ! \Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
-        throw \Illuminate\Validation\ValidationException::withMessages([
-            'email' => ['The provided credentials do not match our records.'],
-        ]);
-    }
-    
-    return response()->json([
-        'token' => $user->createToken($request->device_name)->plainTextToken,
-        'user' => $user
-    ]);
-});
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 
 // Public API routes (if you want them accessible without auth)
 Route::apiResource('categories', CategoryController::class);
