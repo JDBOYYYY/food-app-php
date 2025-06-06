@@ -37,7 +37,7 @@ class AddressController extends Controller
     public function show(Request $request, Address $address)
     {
         $user = $request->user();
-        if ($address->UserId !== $user->id) {
+        if ((int) $address->UserId !== (int) $user->id) {
             return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
         }
         $address->load('user');
@@ -47,7 +47,7 @@ class AddressController extends Controller
     public function update(UpdateAddressRequest $request, Address $address)
     {
         $user = $request->user();
-        if ($address->UserId !== $user->id) {
+        if ((int) $address->UserId !== (int) $user->id) {
             return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
         }
         $address->update($request->validated());
@@ -58,7 +58,7 @@ class AddressController extends Controller
     public function destroy(Request $request, Address $address)
     {
         $user = $request->user();
-        if ($address->UserId !== $user->id) {
+        if ((int) $address->UserId !== (int) $user->id) {
             return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
         }
         $address->delete();

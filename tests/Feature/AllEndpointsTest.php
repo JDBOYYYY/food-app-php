@@ -17,6 +17,7 @@ class AllEndpointsTest extends TestCase
     {
         parent::setUp();
         Artisan::call('key:generate');
+
         // create base records
         $this->user = User::factory()->create();
         $this->category = Category::create(['Name' => 'Category']);
@@ -70,11 +71,13 @@ class AllEndpointsTest extends TestCase
         $addrShow = $this->getJson('/api/addresses/'.$this->address->Id);
         $addrShow->assertStatus(200);
         $this->postJson('/api/products/'.$this->product->Id.'/favorite')->assertStatus(201);
+
         $this->getJson('/api/favorites')->assertStatus(200)
             ->assertJsonCount(1, 'data');
         $this->deleteJson('/api/products/'.$this->product->Id.'/unfavorite')->assertStatus(204);
         $this->getJson('/api/favorites')->assertStatus(200)
             ->assertJsonCount(0, 'data');
+      
         // order creation
         $orderPayload = [
             'ShippingAddressId' => $this->address->Id,
