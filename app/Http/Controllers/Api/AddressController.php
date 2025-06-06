@@ -9,24 +9,29 @@ use App\Http\Requests\UpdateAddressRequest;
 use App\Http\Resources\AddressResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth; // For authenticated user
+// REMOVE THIS LINE: use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\Auth; // Keep this for Auth::user()
 
 class AddressController extends Controller
 {
     public function __construct()
     {
-        // Placeholder: Apply Sanctum auth middleware once it's set up
-        // $this->middleware('auth:sanctum')->except(['index', 'show']); // Example
+        // Now this should work
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
     }
 
     public function index(Request $request)
     {
         // If we have auth:
-        // $user = Auth::user();
-        // $addresses = $user->addresses()->get();
-        // return AddressResource::collection($addresses);
+        // $user = Auth::user(); // Or $request->user() if middleware is applied
+        // if ($user) {
+        //     $addresses = $user->addresses()->get();
+        //     return AddressResource::collection($addresses);
+        // }
 
         // Temporary: For testing without full auth, allow fetching all or by userId param
+        // Since 'index' is excepted from 'auth:sanctum', Auth::user() might be null here
+        // unless a token is optionally provided.
         if ($request->has('userId')) {
              $addresses = Address::where('UserId', $request->input('userId'))->get();
         } else {
@@ -38,20 +43,15 @@ class AddressController extends Controller
 
     public function store(CreateAddressRequest $request)
     {
-        // ONCE AUTH IS SET UP:
-        // $user = Auth::user();
-        // $address = $user->addresses()->create($request->validated());
+        $user = Auth::user();
+        // $user = Auth::user(); // Also works
 
-        // TEMPORARY FOR TESTING (assuming a user with ID 1 exists from seeder):
-        $userIdToUse = 1; // This is a placeholder!
-        $user = \App\Models\User::find($userIdToUse);
         if (!$user) {
-            return response()->json(['message' => "Test User with ID {$userIdToUse} not found. Seed users first."], 404);
+            // This case should ideally not be hit if 'auth:sanctum' middleware is active for store
+            // and a valid token is not provided. The middleware would deny access first.
+            return response()->json(['message' => "User not authenticated."], Response::HTTP_UNAUTHORIZED);
         }
         $address = $user->addresses()->create($request->validated());
-        // OR if UserId is made fillable and you want to pass it (less ideal):
-        // $address = Address::create(array_merge($request->validated(), ['UserId' => $userIdToUse]));
-
 
         return (new AddressResource($address))
                 ->response()
@@ -62,7 +62,7 @@ class AddressController extends Controller
     {
         // TODO: Authorization - user can only see their own address or admin can see any
         // $this->authorize('view', $address); // Requires a Policy
-        $address->load('user'); // Eager load user for context
+        $address->load('user');
         return new AddressResource($address);
     }
 
