@@ -9,7 +9,10 @@ use App\Http\Controllers\Api\UserFavoriteController;
 use App\Http\Controllers\Api\RestaurantController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductReviewController;
+use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\OrderItemController;
 use App\Http\Controllers\Api\AuthController;
+
 
 // Test route
 Route::get('/ping', function () {
@@ -42,6 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // User-specific resources
     Route::apiResource('addresses', AddressController::class);
     Route::apiResource('orders', OrderController::class);
+    Route::apiResource('payments', PaymentController::class);
+    Route::apiResource('order-items', OrderItemController::class);
     
     // Favorites
     Route::get('/favorites', [UserFavoriteController::class, 'index'])->name('favorites.index');
