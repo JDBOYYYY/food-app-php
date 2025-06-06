@@ -1,13 +1,13 @@
 <?php
 namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateAddressRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // Will require user to own the address or be admin
-        return true; // Placeholder
+        return Auth::check();
     }
 
     public function rules(): array

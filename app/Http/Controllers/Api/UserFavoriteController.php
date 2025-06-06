@@ -12,8 +12,7 @@ class UserFavoriteController extends Controller
 {
     public function __construct()
     {
-        // All actions here require an authenticated user
-        // $this->middleware('auth:sanctum'); // Add when Sanctum is ready
+        $this->middleware('auth:sanctum');
     }
 
     /**
@@ -23,9 +22,9 @@ class UserFavoriteController extends Controller
     public function index()
     {
         $user = Auth::user();
-        // If testing without auth:
-        if (!$user) { $user = \App\Models\User::where('email', 'user@example.com')->first(); } // Temporary
-        if (!$user) { return response()->json(['message' => 'User not found for favorites list.'], 404); }
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated.'], Response::HTTP_UNAUTHORIZED);
+        }
 
 
         // Eager load what ProductResource might need (category, restaurant)
@@ -40,9 +39,9 @@ class UserFavoriteController extends Controller
     public function store(Request $request, Product $product) // Product via route-model binding
     {
         $user = Auth::user();
-        // If testing without auth:
-        if (!$user) { $user = \App\Models\User::where('email', 'user@example.com')->first(); } // Temporary
-        if (!$user) { return response()->json(['message' => 'User not found to add favorite.'], 404); }
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated.'], Response::HTTP_UNAUTHORIZED);
+        }
 
         // Attach if not already attached. syncWithoutDetaching adds if not present.
         // The second argument to attach/sync is for extra pivot data.
@@ -58,9 +57,9 @@ class UserFavoriteController extends Controller
     public function destroy(Request $request, Product $product) // Product via route-model binding
     {
         $user = Auth::user();
-        // If testing without auth:
-        if (!$user) { $user = \App\Models\User::where('email', 'user@example.com')->first(); } // Temporary
-        if (!$user) { return response()->json(['message' => 'User not found to remove favorite.'], 404); }
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated.'], Response::HTTP_UNAUTHORIZED);
+        }
 
         $user->favoriteProducts()->detach($product->Id);
 

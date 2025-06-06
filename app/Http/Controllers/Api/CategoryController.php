@@ -12,6 +12,11 @@ use Illuminate\Http\Response; // For HTTP status codes
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      * Corresponds to: GET api/categories (GetCategories in .NET)

@@ -17,8 +17,7 @@ class OrderController extends Controller
 {
     public function __construct()
     {
-        // Most order actions should be protected
-        // $this->middleware('auth:sanctum'); // Add when Sanctum is ready
+        $this->middleware('auth:sanctum');
     }
 
     /**
@@ -28,9 +27,9 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        // Temporary for testing without full auth
-        if (!$user) { $user = \App\Models\User::where('email', 'user@example.com')->first(); }
-        if (!$user) { return response()->json(['message' => 'User not found for listing orders.'], 404); }
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated.'], Response::HTTP_UNAUTHORIZED);
+        }
 
         $orders = $user->orders() // Assuming 'orders' relationship exists on User model
                        ->with(['shippingAddress', 'billingAddress', 'orderItems.product']) // Eager load details
@@ -47,9 +46,9 @@ class OrderController extends Controller
     public function store(CreateOrderRequest $request)
     {
         $user = Auth::user();
-        // Temporary for testing without full auth
-        if (!$user) { $user = \App\Models\User::where('email', 'user@example.com')->first(); }
-        if (!$user) { return response()->json(['message' => 'User not found to create order.'], 400); }
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated.'], Response::HTTP_UNAUTHORIZED);
+        }
 
         $validatedData = $request->validated();
         $orderItemsData = $validatedData['items'];

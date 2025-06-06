@@ -7,8 +7,7 @@ class CreateReviewRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // return Auth::check(); // User must be logged in
-        return true; // Placeholder until Sanctum auth is fully implemented
+        return Auth::check();
     }
 
     public function rules(): array

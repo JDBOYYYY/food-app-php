@@ -15,7 +15,7 @@ class ProductReviewController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('auth:sanctum')->except(['index']); // Example: listing reviews is public
+        $this->middleware('auth:sanctum')->except(['index']);
     }
 
     /**
@@ -35,9 +35,9 @@ class ProductReviewController extends Controller
     public function store(CreateReviewRequest $request, Product $product)
     {
         $user = Auth::user();
-        // Temporary for testing without full auth
-        if (!$user) { $user = \App\Models\User::where('email', 'user@example.com')->first(); }
-        if (!$user) { return response()->json(['message' => 'User not found to create review.'], 400); }
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated.'], Response::HTTP_UNAUTHORIZED);
+        }
 
         // Check if user already reviewed this product (optional business rule)
         // if ($product->reviews()->where('UserId', $user->id)->exists()) {

@@ -13,9 +13,7 @@ class CreateOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Only authenticated users can create orders.
-        // return Auth::check(); // Enable this once Sanctum auth is fully working
-        return true; // Placeholder for now until auth is fully set up
+        return Auth::check();
     }
 
     /**

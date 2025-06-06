@@ -2,18 +2,25 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ExampleTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * A basic test example.
      */
-    public function test_the_application_returns_a_successful_response(): void
+    public function test_authenticated_user_endpoint_returns_user_info(): void
     {
-        $response = $this->get('/');
+        $user = User::factory()->create();
+        $token = $user->createToken('test')->plainTextToken;
 
-        $response->assertStatus(200);
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)
+            ->getJson('/api/user');
+
+        $response->assertStatus(200)
+            ->assertJson(['id' => $user->id]);
     }
 }

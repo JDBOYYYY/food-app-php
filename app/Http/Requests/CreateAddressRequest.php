@@ -1,13 +1,13 @@
 <?php
 namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CreateAddressRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // Will require authenticated user later
-        return true; // Placeholder
+        return Auth::check();
     }
 
     public function rules(): array

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule; // For more complex rules like unique ignoring current model
 
 class UpdateRestaurantRequest extends FormRequest
@@ -12,12 +13,7 @@ class UpdateRestaurantRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Placeholder: For now, allow anyone.
-        // Replace with actual authorization logic.
-        // Example:
-        // $user = $this->user();
-        // return $user && $user->isAdmin();
-        return true;
+        return Auth::check();
     }
 
     /**

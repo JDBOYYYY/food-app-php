@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\User; // If you want to use User model for authorization
+use Illuminate\Support\Facades\Auth;
 
 class CreateRestaurantRequest extends FormRequest
 {
@@ -13,12 +13,7 @@ class CreateRestaurantRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Placeholder: For now, allow anyone.
-        // Replace with actual authorization logic when auth is set up.
-        // Example:
-        // $user = $this->user(); // Gets the authenticated user via Sanctum
-        // return $user && $user->isAdmin();
-        return true;
+        return Auth::check();
     }
 
     /**
