@@ -59,3 +59,5 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Using the Vue frontend
+After cloning run `npm install` then `npm run build` to generate the Vite assets required for the Laravel view. Start the Laravel server with `php artisan serve`.

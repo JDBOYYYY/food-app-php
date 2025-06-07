@@ -1,5 +1,7 @@
 <template>
   <div class="p-4">
+    <router-link to="/login" class="underline text-blue-600 float-right ml-2">Login</router-link>
+    <router-link to="/favorites" class="underline text-blue-600 float-right">Ulubione</router-link>
     <h1 class="text-2xl font-bold mb-4">Restauracje</h1>
     <div v-if="loading" class="text-center">Ładowanie...</div>
     <div v-else>
