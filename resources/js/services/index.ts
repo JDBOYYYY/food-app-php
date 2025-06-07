@@ -3,4 +3,6 @@ export * from './categoryService';
 export * from './restaurantService';
 export * from './productService';
 export * from './favoriteService';
+export * from './addressService';
+export * from './orderService';
 // Add other services here as we create them

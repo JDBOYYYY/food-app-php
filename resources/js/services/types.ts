@@ -70,3 +70,49 @@ export interface ProductDto {
   Category?: CategoryDto;
   Restaurant?: RestaurantDto;
 }
+
+export interface AddressDto {
+  Id: number;
+  Street: string;
+  Apartment: string | null;
+  City: string;
+  PostalCode: string;
+  Country: string;
+}
+
+export interface CreateOrderItemDto {
+  ProductId: number;
+  Quantity: number;
+}
+
+export interface CreateOrderDto {
+  ShippingAddressId: number;
+  BillingAddressId?: number;
+  items: CreateOrderItemDto[];
+}
+// ...
+
+// ... (other types like AddressDto, CreateOrderDto)
+
+export interface OrderItemDto {
+  Id: number;
+  Name: string;
+  Quantity: number;
+  Price: number;
+}
+
+// --- ADD THIS INTERFACE ---
+export interface OrderDto {
+  Id: number;
+  UserId: number;
+  OrderDate: string;
+  TotalAmount: number;
+  Status: string;
+  ShippingAddressId: number;
+  BillingAddressId: number;
+  OrderItems: OrderItemDto[];
+  // You can add other fields like User or Address objects if your API returns them
+}
+// -------------------------
+
+// ... (the rest of your types)

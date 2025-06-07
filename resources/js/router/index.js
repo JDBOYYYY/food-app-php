@@ -29,7 +29,7 @@ const routes= [
         path: 'cart',
         name: 'Cart',
         component: () => import('../views/CartView.vue'),
-        meta: { requiresAuth: true }, // Requires user to be logged in
+        // meta: { requiresAuth: true }, // Requires user to be logged in
       },
       {
         path: 'checkout',
