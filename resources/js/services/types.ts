@@ -50,7 +50,12 @@ export interface RestaurantDto {
 }
 
 export interface RestaurantDetailDto extends RestaurantDto {
-  products: ProductDto[];
+  Products: ProductDto[];
+  // Add these new properties
+  isOpen?: boolean;
+  reviewCount?: number;
+  description?: string;
+  isFavorite?: boolean;
 }
 
 // --- Product ---

@@ -62,9 +62,13 @@ class RestaurantController extends Controller
      * Display the specified resource.
      * GET /api/restaurants/{restaurant}
      */
+    // Corrected code
     public function show(Restaurant $restaurant) // Route-model binding
     {
-        $restaurant->load('categories', 'products.category'); // Eager load categories and products with their categories
+        // Eager load the relationships we need for the detail page
+        $restaurant->load(['categories', 'products.category']);
+
+        // Return the resource, which will now include the loaded relationships
         return new RestaurantResource($restaurant);
     }
 

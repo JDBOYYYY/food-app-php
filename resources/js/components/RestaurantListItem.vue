@@ -89,7 +89,10 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { Heart, Star, Clock } from 'lucide-vue-next';
+import { useAuthStore } from '../stores/auth';
+import { favoriteService } from '../services/index';
 
 export interface RestaurantListItemProps {
   id: number;
@@ -103,6 +106,7 @@ export interface RestaurantListItemProps {
   isOpen?: boolean;
   promoLabel?: string | null;
   isFavorite?: boolean;
+  categories?: { Id: number; Name: string }[];
 }
 
 const props = defineProps<{
@@ -111,6 +115,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(['press']);
+const router = useRouter();
+const auth = useAuthStore();
 
 const isFavoriteLocal = ref(props.item.isFavorite || false);
 const isLoadingFavorite = ref(false);
@@ -134,14 +140,36 @@ const onPress = () => {
 };
 
 const handleFavoritePress = async () => {
-  if (isLoadingFavorite.value || !props.onToggleFavorite) return;
+  if (!auth.isAuthenticated) {
+    if (
+      confirm(
+        'You must be logged in to add favorites. Would you like to go to the login page?',
+      )
+    ) {
+      router.push('/login');
+    }
+    return;
+  }
+
+  if (isLoadingFavorite.value) return;
   isLoadingFavorite.value = true;
+
   const newStatus = !isFavoriteLocal.value;
+
   try {
-    await props.onToggleFavorite(props.item.id, newStatus);
+    // 2. Call the real API service
+    if (newStatus) {
+      await favoriteService.addRestaurantFavorite(props.item.id);
+    } else {
+      await favoriteService.removeRestaurantFavorite(props.item.id);
+    }
+    // 3. Update the local state only on success
     isFavoriteLocal.value = newStatus;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to toggle favorite:', error);
+    alert(`Error: ${error.message || 'Could not update favorites.'}`);
+    // Note: We don't revert the UI here, assuming the API is the source of truth.
+    // A better approach would be to refetch the user's favorites to sync state.
   } finally {
     isLoadingFavorite.value = false;
   }

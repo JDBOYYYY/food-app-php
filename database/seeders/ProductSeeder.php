@@ -9,72 +9,80 @@ use App\Models\Restaurant;
 
 class ProductSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Fetch some existing categories and restaurants (assuming they were seeded)
-        $pizzaCategory = Category::where('Name', 'Pizzas')->first();
-        $burgersCategory = Category::where('Name', 'Burgery')->first();
-        $mainCoursesCategory = Category::where('Name', 'Dania główne')->first(); // Main Courses
+        // This seeder now ONLY creates data. Cleanup is handled in DatabaseSeeder.
 
-        $luigisRestaurant = Restaurant::where('Name', 'Luigi\'s Pizza Place')->first();
-        $sushiExpress = Restaurant::where('Name', 'Sushi Express')->first(); // Example
+        $categories = Category::all()->keyBy('Name');
+        $restaurants = Restaurant::all()->keyBy('Name');
 
-        if (!$pizzaCategory || !$burgersCategory || !$luigisRestaurant || !$mainCoursesCategory) {
-            $this->command->warn('Required categories or restaurants not found for ProductSeeder. Skipping some products.');
-            // You might want to create them here if they don't exist, or ensure seeders run in order.
+        $products = [
+            [
+                'Restaurant' => 'Pizzeria Ciao a Tutti', 'Category' => 'Pizzas', 'Name' => 'Margherita',
+                'Description' => 'Sos pomidorowy San Marzano, mozzarella fior di latte, parmezan, świeża bazylia, oliwa z oliwek.',
+                'Price' => 32.00, 'ImageUrl' => 'https://placehold.co/800x600/E91E63/FFFFFF?text=Margherita'
+            ],
+            [
+                'Restaurant' => 'Pizzeria Ciao a Tutti', 'Category' => 'Pizzas', 'Name' => 'Diavola',
+                'Description' => 'Sos pomidorowy, mozzarella fior di latte, pikantne salami Spianata Calabra, papryczka chili.',
+                'Price' => 38.00, 'ImageUrl' => 'https://placehold.co/800x600/F44336/FFFFFF?text=Diavola'
+            ],
+            [
+                'Restaurant' => 'Pizzeria Ciao a Tutti', 'Category' => 'Napoje', 'Name' => 'Coca-Cola',
+                'Description' => 'Oryginalny smak Coca-Cola.',
+                'Price' => 8.00, 'ImageUrl' => 'https://placehold.co/800x600/c10c0c/FFFFFF?text=Cola'
+            ],
+            [
+                'Restaurant' => 'Uki Uki', 'Category' => 'Zupy', 'Name' => 'Tantan Udon',
+                'Description' => 'Aromatyczny bulion z pastą sezamową i sosem sojowym z mielonym mięsem wieprzowym.',
+                'Price' => 45.00, 'ImageUrl' => 'https://placehold.co/800x600/4A148C/FFFFFF?text=Tantan+Udon'
+            ],
+            [
+                'Restaurant' => 'Uki Uki', 'Category' => 'Zupy', 'Name' => 'Kake Udon',
+                'Description' => 'Klasyczny bulion rybny na bazie płatków katsuobushi i wodorostów kombu z grubym makaronem udon.',
+                'Price' => 35.00, 'ImageUrl' => 'https://placehold.co/800x600/3F51B5/FFFFFF?text=Kake+Udon'
+            ],
+            [
+                'Restaurant' => 'Barn Burger', 'Category' => 'Burgery', 'Name' => 'Classic Barn',
+                'Description' => 'Soczysta wołowina 200g, sałata, pomidor, czerwona cebula, ogórek konserwowy, sos BBQ.',
+                'Price' => 39.00, 'ImageUrl' => 'https://placehold.co/800x600/795548/FFFFFF?text=Classic+Burger'
+            ],
+            [
+                'Restaurant' => 'Barn Burger', 'Category' => 'Burgery', 'Name' => 'BBQ Bekon',
+                'Description' => 'Wołowina 200g, chrupiący bekon, ser cheddar, krążki cebulowe, sałata, sos BBQ.',
+                'Price' => 44.00, 'ImageUrl' => 'https://placehold.co/800x600/A1887F/FFFFFF?text=BBQ+Bacon'
+            ],
+            [
+                'Restaurant' => 'Barn Burger', 'Category' => 'Przystawki', 'Name' => 'Frytki Belgijskie',
+                'Description' => 'Grubo krojone, podwójnie smażone frytki z ziemniaków.',
+                'Price' => 15.00, 'ImageUrl' => 'https://placehold.co/800x600/FFC107/000000?text=Fries'
+            ],
+            [
+                'Restaurant' => 'Vegan Ramen Shop', 'Category' => 'Zupy', 'Name' => 'Spicy Miso Ramen',
+                'Description' => 'Kremowy bulion na bazie grzybów i warzyw z pastą miso, olejem chili, tofu i warzywami.',
+                'Price' => 42.00, 'ImageUrl' => 'https://placehold.co/800x600/4CAF50/FFFFFF?text=Spicy+Ramen'
+            ],
+            [
+                'Restaurant' => 'Vegan Ramen Shop', 'Category' => 'Zupy', 'Name' => 'Clear Shoyu Ramen',
+                'Description' => 'Klarowny bulion warzywny z sosem sojowym, boczniakami, bambusem i nori.',
+                'Price' => 39.00, 'ImageUrl' => 'https://placehold.co/800x600/8BC34A/FFFFFF?text=Shoyu+Ramen'
+            ],
+        ];
+
+        foreach ($products as $productData) {
+            $restaurant = $restaurants->get($productData['Restaurant']);
+            $category = $categories->get($productData['Category']);
+
+            if ($restaurant && $category) {
+                Product::create([
+                    'Name' => $productData['Name'],
+                    'Description' => $productData['Description'],
+                    'Price' => $productData['Price'],
+                    'ImageUrl' => $productData['ImageUrl'],
+                    'RestaurantId' => $restaurant->Id,
+                    'CategoryId' => $category->Id,
+                ]);
+            }
         }
-
-        if ($luigisRestaurant && $pizzaCategory) {
-            Product::updateOrCreate(
-                ['Name' => 'Margherita Pizza', 'RestaurantId' => $luigisRestaurant->Id],
-                [
-                    'Description' => 'Classic delight with fresh mozzarella and basil.',
-                    'Price' => 12.99,
-                    'ImageUrl' => 'http://example.com/images/margherita.jpg',
-                    'CategoryId' => $pizzaCategory->Id,
-                ]
-            );
-            Product::updateOrCreate(
-                ['Name' => 'Pepperoni Passion', 'RestaurantId' => $luigisRestaurant->Id],
-                [
-                    'Description' => 'Loaded with spicy pepperoni.',
-                    'Price' => 14.50,
-                    'ImageUrl' => 'http://example.com/images/pepperoni.jpg',
-                    'CategoryId' => $pizzaCategory->Id,
-                ]
-            );
-        }
-
-        if ($luigisRestaurant && $mainCoursesCategory) {
-             Product::updateOrCreate(
-                ['Name' => 'Spaghetti Carbonara', 'RestaurantId' => $luigisRestaurant->Id],
-                [
-                    'Description' => 'Creamy pasta with pancetta and pecorino.',
-                    'Price' => 16.00,
-                    'ImageUrl' => 'http://example.com/images/carbonara.jpg',
-                    'CategoryId' => $mainCoursesCategory->Id,
-                ]
-            );
-        }
-
-
-        // Example for another restaurant and category
-        if ($sushiExpress && $burgersCategory) { // Let's pretend Sushi Express also sells a "Sushi Burger"
-            Product::updateOrCreate(
-                ['Name' => 'Deluxe Sushi Burger', 'RestaurantId' => $sushiExpress->Id],
-                [
-                    'Description' => 'A unique fusion burger with a sushi twist.',
-                    'Price' => 18.99,
-                    'ImageUrl' => 'http://example.com/images/sushiburger.jpg',
-                    'CategoryId' => $burgersCategory->Id, // Assuming Burgers category exists
-                ]
-            );
-        }
-
-        // Add more products as needed
-        $this->command->info('Products seeded.');
     }
 }

@@ -28,6 +28,7 @@ class RestaurantResource extends JsonResource
             // This will only be included if 'categories' relationship was eager-loaded
             // e.g., Restaurant::with('categories')->find(1);
             'Categories' => CategoryResource::collection($this->whenLoaded('categories')),
+            'Products' => ProductResource::collection($this->whenLoaded('products')),
 
             // If you want to include timestamps from the Restaurant model:
             // 'created_at' => $this->created_at,

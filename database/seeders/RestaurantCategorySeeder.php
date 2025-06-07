@@ -5,44 +5,69 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Restaurant;
 use App\Models\Category;
-use Illuminate\Support\Facades\DB; // For direct pivot table inserts
+use Illuminate\Support\Facades\DB;
 
 class RestaurantCategorySeeder extends Seeder
 {
     public function run(): void
     {
-        // Example: Luigi's Pizza Place (Restaurant) belongs to Pizzas (Category) and Italian Food (Category)
-        $luigis = Restaurant::where('Name', 'Luigi\'s Pizza Place')->first();
-        $sushiExpress = Restaurant::where('Name', 'Sushi Express')->first(); // Assuming you seeded this
+        // Clear the pivot table to ensure a clean slate on re-seeding
+        DB::table('RestaurantCategories')->truncate();
 
-        $pizzasCategory = Category::where('Name', 'Pizzas')->first();
-        $italianCategory = Category::where('Name', 'Dania główne')->first(); // Assuming 'Main Courses' is Italian
-        $sushiCategory = Category::where('Name', 'Przystawki')->first(); // Or a more specific 'Sushi' category
+        // Get all categories and restaurants from the database
+        $categories = Category::all()->keyBy('Name');
+        $restaurants = Restaurant::all();
 
-        if ($luigis && $pizzasCategory) {
-            // Option 1: Using Eloquent's attach() method (preferred)
-            $luigis->categories()->attach($pizzasCategory->Id);
+        foreach ($restaurants as $restaurant) {
+            $assignedCategories = [];
+
+            // Assign categories based on keywords in the restaurant's name
+            if (str_contains(strtolower($restaurant->Name), 'pizza')) {
+                if (isset($categories['Pizzas'])) {
+                    $assignedCategories[] = $categories['Pizzas']->Id;
+                }
+            }
+            if (str_contains(strtolower($restaurant->Name), 'burger')) {
+                if (isset($categories['Burgery'])) {
+                    $assignedCategories[] = $categories['Burgery']->Id;
+                }
+            }
+            if (str_contains(strtolower($restaurant->Name), 'sushi')) {
+                if (isset($categories['Przystawki'])) { // Assuming Sushi is an appetizer category for now
+                    $assignedCategories[] = $categories['Przystawki']->Id;
+                }
+            }
+            if (str_contains(strtolower($restaurant->Name), 'ramen')) {
+                 if (isset($categories['Zupy'])) {
+                    $assignedCategories[] = $categories['Zupy']->Id;
+                }
+            }
+            if (str_contains(strtolower($restaurant->Name), 'thai') || str_contains(strtolower($restaurant->Name), 'indian')) {
+                 if (isset($categories['Dania główne'])) {
+                    $assignedCategories[] = $categories['Dania główne']->Id;
+                }
+            }
+             if (str_contains(strtolower($restaurant->Name), 'vegan')) {
+                 if (isset($categories['Sałatki'])) {
+                    $assignedCategories[] = $categories['Sałatki']->Id;
+                }
+            }
+            if (str_contains(strtolower($restaurant->Name), 'pancake')) {
+                 if (isset($categories['Desery'])) {
+                    $assignedCategories[] = $categories['Desery']->Id;
+                }
+            }
+
+            // If no categories were assigned based on name, assign a default one
+            if (empty($assignedCategories)) {
+                if (isset($categories['Dania główne'])) {
+                    $assignedCategories[] = $categories['Dania główne']->Id;
+                }
+            }
+
+            // Attach the found categories to the restaurant
+            // syncWithoutDetaching prevents errors if a category is already attached
+            $restaurant->categories()->syncWithoutDetaching($assignedCategories);
         }
-        if ($luigis && $italianCategory) {
-            $luigis->categories()->attach($italianCategory->Id);
-        }
-        if ($sushiExpress && $sushiCategory) {
-            $sushiExpress->categories()->attach($sushiCategory->Id);
-        }
-
-        // You can also attach multiple categories at once:
-        // if ($luigis && $pizzasCategory && $italianCategory) {
-        //     $luigis->categories()->attach([$pizzasCategory->Id, $italianCategory->Id]);
-        // }
-
-        // Option 2: Direct DB insert into pivot table (less common for seeding relationships)
-        // if ($luigis && $pizzasCategory) {
-        //     DB::table('RestaurantCategories')->insert([
-        //         'RestaurantId' => $luigis->Id,
-        //         'CategoryId' => $pizzasCategory->Id,
-        //         // 'created_at' => now(), // If pivot table has timestamps
-        //         // 'updated_at' => now(),
-        //     ]);
-        // }
     }
 }

@@ -27,32 +27,47 @@
       </div>
     </section>
 
-    <!-- Categories Section -->
     <section class="py-8 bg-white">
+      <!-- The container class is removed from the parent and applied to the header -->
       <div class="container mx-auto px-4">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-2xl font-bold text-gray-900">Browse by Category</h2>
         </div>
-        <div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+      </div>
+    
+      <!-- Changed from horizontal scroll to flex wrap -->
+      <div class="container mx-auto px-4">
+        <div
+          class="flex flex-wrap gap-4"
+          role="tablist"
+          aria-orientation="horizontal"
+        >
+          <!-- "All" button is now a real button that clears the filter -->
           <button
             @click="selectedCategory = null"
+            role="tab"
+            :aria-selected="selectedCategory === null"
             :class="[
               'flex-shrink-0 px-4 py-2 rounded-full font-medium transition-colors',
               selectedCategory === null
-                ? 'bg-orange-500 text-white'
+                ? 'bg-orange-500 text-white shadow'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
             ]"
           >
             All
           </button>
+        
+          <!-- The rest of the category buttons - now toggleable -->
           <button
             v-for="category in categories"
             :key="category.Id"
-            @click="selectedCategory = category.Id"
+            @click="selectedCategory = selectedCategory === category.Id ? null : category.Id"
+            role="tab"
+            :aria-selected="selectedCategory === category.Id"
             :class="[
               'flex-shrink-0 px-4 py-2 rounded-full font-medium transition-colors flex items-center',
               selectedCategory === category.Id
-                ? 'bg-orange-500 text-white'
+                ? 'bg-orange-500 text-white shadow'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
             ]"
           >

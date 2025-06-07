@@ -1,6 +1,6 @@
 import apiClient from './apiClient';
 import { categoryService } from './categoryService';
-import type { RestaurantDto, CategoryDto } from './types';
+import type { RestaurantDto, CategoryDto, RestaurantDetailDto } from './types';
 import type { RestaurantListItemProps } from '../components/RestaurantListItem.vue';
 
 // This interface is for internal use within the service
@@ -37,6 +37,7 @@ const mapDtoToProps = (dto: RestaurantDto): RestaurantListItemProps => ({
   distance: dto.Distance,
   priceRange: dto.PriceRange,
   cuisineType: dto.Categories?.map((c) => c.Name).join(', ') || 'Various',
+  categories: dto.Categories,
   isFavorite: false, // This will be handled by a dedicated favorites store later
   isOpen: Math.random() > 0.2, // Mock data, as not present in API DTO
   promoLabel:
@@ -95,5 +96,21 @@ export const restaurantService = {
     //   await apiClient(`/api/favorites/restaurant/${restaurantId}`, { method: 'DELETE' });
     // }
     return Promise.resolve();
+  },
+
+  async getRestaurantPageData(restaurantId: number): Promise<RestaurantDetailDto> {
+    const response = await apiClient<{ data: RestaurantDetailDto }>(`/api/restaurants/${restaurantId}`);
+    const restaurantData = response.data;
+
+    // Add mock data that is missing from the API response
+    restaurantData.isOpen = Math.random() > 0.2;
+    restaurantData.reviewCount = Math.floor(Math.random() * 200) + 50;
+    restaurantData.description =
+      'A delightful place offering the best dishes from this region. Our chefs use only the freshest ingredients to bring you an unforgettable dining experience.';
+    
+    // We can also fetch user's favorite status for this restaurant here in the future
+    restaurantData.isFavorite = false; // Placeholder
+
+    return restaurantData;
   },
 };
