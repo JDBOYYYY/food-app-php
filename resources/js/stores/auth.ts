@@ -1,71 +1,62 @@
-import { defineStore } from "pinia";
-import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
-import { jwtDecode, type JwtPayload } from "jwt-decode";
-import { authService, type LoginDto, type RegisterDto } from "../services/index";
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import { authService, type LoginDto, type RegisterDto, type UserDto } from '../services';
 
-interface CustomJwtPayload extends JwtPayload {
-  role?: string | string[];
-  name?: string;
-  nameid?: string; // Common claim for user ID
-}
-
-export const useAuthStore = defineStore("auth", () => {
-  const token = ref<string | null>(localStorage.getItem("userToken"));
-  const user = ref<{ id: string | null; name: string | null; roles: string[] } | null>(null);
+export const useAuthStore = defineStore('auth', () => {
+  // --- STATE ---
+  const token = ref<string | null>(localStorage.getItem('userToken'));
+  // The user object will now be stored directly
+  const user = ref<UserDto | null>(JSON.parse(localStorage.getItem('user') || 'null'));
   const loading = ref(true);
 
-  const isAuthenticated = computed(() => !!token.value);
-  const isAdmin = computed(() => user.value?.roles.includes("Admin") ?? false);
+  // --- GETTERS ---
+  const isAuthenticated = computed(() => !!token.value && !!user.value);
+  const isAdmin = computed(() => user.value?.role === 'admin');
 
-  function decodeAndSetUser(jwt: string | null) {
-    if (!jwt) {
-      user.value = null;
-      return;
+  // --- ACTIONS ---
+  function setUserAndToken(newToken: string | null, newUser: UserDto | null) {
+    token.value = newToken;
+    user.value = newUser;
+    if (newToken) {
+      localStorage.setItem('userToken', newToken);
+    } else {
+      localStorage.removeItem('userToken');
     }
-    try {
-      const decoded = jwtDecode<CustomJwtPayload>(jwt);
-      const roles = Array.isArray(decoded.role)
-        ? decoded.role
-        : decoded.role
-          ? [decoded.role]
-          : [];
-      user.value = {
-        id: decoded.sub ?? decoded.nameid ?? null,
-        name: decoded.name ?? null,
-        roles: roles,
-      };
-    } catch (e) {
-      console.error("Failed to decode token:", e);
-      user.value = null;
+    if (newUser) {
+      localStorage.setItem('user', JSON.stringify(newUser));
+    } else {
+      localStorage.removeItem('user');
     }
   }
 
   async function signIn(loginData: LoginDto) {
     const response = await authService.login(loginData);
-    if (response.token) {
-      localStorage.setItem("userToken", response.token);
-      token.value = response.token;
-      decodeAndSetUser(response.token);
+    if (response.token && response.user) {
+      setUserAndToken(response.token, response.user);
     }
   }
 
   async function register(registerData: RegisterDto) {
-    await authService.register(registerData);
+    const response = await authService.register(registerData);
+    if (response.token && response.user) {
+      setUserAndToken(response.token, response.user);
+    }
   }
 
   async function signOut() {
-    localStorage.removeItem("userToken");
-    token.value = null;
-    user.value = null;
+    setUserAndToken(null, null);
     // The router guard will handle redirection
   }
 
   function checkAuthStatus() {
-    loading.value = true;
-    const storedToken = localStorage.getItem("userToken");
-    token.value = storedToken;
-    decodeAndSetUser(storedToken);
+    const storedToken = localStorage.getItem('userToken');
+    const storedUser = localStorage.getItem('user');
+    if (storedToken && storedUser) {
+      token.value = storedToken;
+      user.value = JSON.parse(storedUser);
+    } else {
+      setUserAndToken(null, null);
+    }
     loading.value = false;
   }
 
