@@ -1,23 +1,27 @@
 <template>
-  <div class="p-4">
-    <router-link to="/login" class="underline text-blue-600 float-right ml-2">Login</router-link>
-    <router-link to="/favorites" class="underline text-blue-600 float-right">Ulubione</router-link>
+  <div class="p-4 max-w-5xl mx-auto">
+    <div class="flex justify-end gap-4 mb-4">
+      <router-link to="/favorites" class="underline text-blue-600">Ulubione</router-link>
+      <router-link to="/login" class="underline text-blue-600">Login</router-link>
+    </div>
     <h1 class="text-2xl font-bold mb-4">Restauracje</h1>
-    <div v-if="loading" class="text-center">Ładowanie...</div>
-    <div v-else>
-      <ul>
-        <li v-for="r in restaurants" :key="r.id" class="mb-2">
-          <router-link :to="`/restaurants/${r.id}`" class="text-blue-600 underline">
-            {{ r.name }}
-          </router-link>
-        </li>
-      </ul>
+    <div v-if="loading" class="text-center py-10">Ładowanie...</div>
+    <div v-else class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <router-link
+        v-for="r in restaurants"
+        :key="r.id"
+        :to="`/restaurants/${r.id}`"
+        class="block"
+      >
+        <RestaurantCard :restaurant="r" />
+      </router-link>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import RestaurantCard from '../components/RestaurantCard.vue';
 
 const restaurants = ref([]);
 const loading = ref(true);

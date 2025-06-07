@@ -1,17 +1,18 @@
 <template>
-  <div class="p-4">
+  <div class="p-4 max-w-4xl mx-auto">
     <button @click="$router.back()" class="text-sm mb-4 text-blue-500">Powrót</button>
-    <div v-if="loading" class="text-center">Ładowanie...</div>
+    <div v-if="loading" class="text-center py-10">Ładowanie...</div>
     <div v-else-if="restaurant">
-      <h2 class="text-2xl font-bold mb-2">{{ restaurant.name }}</h2>
-      <button v-if="token" @click="toggleFavorite" class="mb-4 px-2 py-1 text-sm text-white" :class="isFav ? 'bg-red-500' : 'bg-green-500'">
-        {{ isFav ? 'Usuń z ulubionych' : 'Dodaj do ulubionych' }}
-      </button>
-      <ul>
-        <li v-for="p in products" :key="p.id" class="mb-1">
-          {{ p.name }} - {{ p.price }} zł
-        </li>
-      </ul>
+      <img :src="restaurant.imageUrl || placeholder" class="w-full h-60 object-cover mb-4 rounded" />
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold">{{ restaurant.name }}</h2>
+        <button v-if="token" @click="toggleFavorite" class="px-3 py-1 text-sm text-white rounded" :class="isFav ? 'bg-red-500' : 'bg-green-500'">
+          {{ isFav ? 'Usuń z ulubionych' : 'Dodaj do ulubionych' }}
+        </button>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-2">
+        <ProductCard v-for="p in products" :key="p.id" :product="p" />
+      </div>
     </div>
     <div v-else>Błąd wczytywania.</div>
   </div>
@@ -21,6 +22,9 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAuth } from '../stores/auth.js';
+import ProductCard from '../components/ProductCard.vue';
+
+const placeholder = '/placeholder-restaurant.png';
 
 const route = useRoute();
 const restaurant = ref(null);
@@ -38,7 +42,14 @@ onMounted(async () => {
       fetch(`/api/products?restaurantId=${id}`)
     ]);
     restaurant.value = await rRes.json();
-    products.value = await pRes.json();
+    const prods = await pRes.json();
+    products.value = prods.map(p => ({
+      id: p.id,
+      name: p.name,
+      description: p.description,
+      price: p.price?.toFixed ? p.price.toFixed(2) : p.price,
+      image: p.imageUrl,
+    }));
     if (token.value) {
       // check if restaurant is favorite
       const fRes = await fetch('/api/favorites', { headers: { Authorization: `Bearer ${token.value}` }});
