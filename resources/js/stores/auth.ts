@@ -29,6 +29,12 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+    function updateUser(newUserData: UserDto) {
+        if (user.value) {
+            user.value = { ...user.value, ...newUserData };
+        }
+    }
+
   async function signIn(loginData: LoginDto) {
     const response = await authService.login(loginData);
     if (response.token && response.user) {
@@ -69,6 +75,7 @@ export const useAuthStore = defineStore('auth', () => {
     signIn,
     register,
     signOut,
+      updateUser,
     checkAuthStatus,
   };
 });

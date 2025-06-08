@@ -19,7 +19,7 @@
 <!--        <div class="flex items-center space-x-4">-->
 <!--          <div v-if="auth.isAuthenticated">-->
 <!--            <router-link to="/profile" class="nav-link">{{-->
-<!--              auth.user?.name || "Profile"-->
+<!--              auth.user?.name || "profile"-->
 <!--            }}</router-link>-->
 <!--            <button @click="auth.signOut()" class="nav-link ml-4">-->
 <!--              Logout-->
