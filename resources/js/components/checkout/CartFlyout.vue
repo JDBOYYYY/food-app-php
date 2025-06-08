@@ -47,7 +47,7 @@
           <img
             :src="
               item.image ||
-              'https:
+              'https://placehold.co/100x100/e2e8f0/4a5568?text=Item'
             "
             :alt="item.name"
             class="h-20 w-20 rounded-lg object-cover"

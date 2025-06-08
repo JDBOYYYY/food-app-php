@@ -72,7 +72,7 @@ watch(
   },
 );
 
-const defaultImage = 'https:
+const defaultImage = 'https://placehold.co/100x100/e2e8f0/4a5568?text=Item';
 const imageSource = computed(() =>
   props.item.ImageUrl && props.item.ImageUrl.startsWith('http')
     ? props.item.ImageUrl
