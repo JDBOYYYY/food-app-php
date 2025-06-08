@@ -32,6 +32,7 @@
             :products="restaurant.Products || []"
             v-model:selectedCategory="selectedCategory"
             @addToBasket="addToBasket"
+            @toggle-product-favorite="handleToggleProductFavorite"
           />
           <OrderSummary
             :basketItems="basketItems"
@@ -126,4 +127,27 @@ onMounted(async () => {
     isLoading.value = false;
   }
 });
+
+const handleToggleProductFavorite = async (
+  productId: number,
+  newStatus: boolean,
+) => {
+  if (!restaurant.value?.Products) return;
+
+  const product = restaurant.value.Products.find((p) => p.Id === productId);
+  if (product) {
+    product.isFavorite = newStatus;
+  }
+
+  try {
+    if (newStatus) {
+      await favoriteService.addProductFavorite(productId);
+    } else {
+      await favoriteService.removeProductFavorite(productId);
+    }
+  } catch (e) {
+    console.error('Failed to update product favorite status:', e);
+    if (product) product.isFavorite = !newStatus; // Revert on error
+  }
+};
 </script>

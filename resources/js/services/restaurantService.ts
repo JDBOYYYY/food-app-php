@@ -2,6 +2,7 @@ import apiClient from './apiClient';
 import { categoryService } from './categoryService';
 import type { RestaurantDto, CategoryDto, RestaurantDetailDto } from './types';
 import type { RestaurantListItemProps } from '../components/RestaurantListItem.vue';
+import {favoriteService} from './favoriteService'
 
 // This interface is for internal use within the service
 interface CategoryWithIcon extends CategoryDto {
@@ -99,8 +100,25 @@ export const restaurantService = {
   },
 
   async getRestaurantPageData(restaurantId: number): Promise<RestaurantDetailDto> {
-    const response = await apiClient<{ data: RestaurantDetailDto }>(`/api/restaurants/${restaurantId}`);
-    const restaurantData = response.data;
+    const [restaurantResponse, favoritesResponse] = await Promise.all([
+      apiClient<{ data: RestaurantDetailDto }>(`/api/restaurants/${restaurantId}`),
+      favoriteService.getUserFavorites(), // This now returns AllFavoritesResponse directly
+    ]);
+
+    const restaurantData = restaurantResponse.data;
+    
+    // --- THIS IS THE FIX ---
+    // We access the 'products' array directly on the favoritesResponse object
+    const favoriteProductIds = new Set(
+      favoritesResponse.products.map((favProduct) => favProduct.Id),
+    );
+
+    if (restaurantData.Products) {
+      restaurantData.Products = restaurantData.Products.map((product) => ({
+        ...product,
+        isFavorite: favoriteProductIds.has(product.Id),
+      }));
+    }
 
     // Add mock data that is missing from the API response
     restaurantData.isOpen = Math.random() > 0.2;

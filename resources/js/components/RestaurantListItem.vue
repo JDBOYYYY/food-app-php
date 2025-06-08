@@ -111,7 +111,7 @@ export interface RestaurantListItemProps {
 
 const props = defineProps<{
   item: RestaurantListItemProps;
-  onToggleFavorite?: (itemId: number, newStatus: boolean) => Promise<void>;
+  onToggleFavorite?: (itemId: number, newStatus: boolean) => Promise<void>; // The '?' makes it optional
 }>();
 
 const emit = defineEmits(['press']);
@@ -148,6 +148,9 @@ const handleFavoritePress = async () => {
     ) {
       router.push('/login');
     }
+    if (isLoadingFavorite.value || !props.onToggleFavorite) return;
+
+    isLoadingFavorite.value = true;
     return;
   }
 
