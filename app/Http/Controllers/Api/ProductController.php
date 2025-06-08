@@ -7,19 +7,17 @@ use App\Models\Product;
 use App\Http\Requests\CreateProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
-use Illuminate\Http\Request; // For query parameters in index()
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     * GET /api/products
-     * Can be filtered by ?categoryId=X or ?restaurantId=X
+     * Display a listing of products.
      */
     public function index(Request $request)
     {
-        $query = Product::query()->with(['category', 'restaurant']); // Eager load relationships
+        $query = Product::query()->with(['category', 'restaurant']);
 
         if ($request->has('categoryId')) {
             $query->where('CategoryId', $request->input('categoryId'));
@@ -29,27 +27,22 @@ class ProductController extends Controller
             $query->where('RestaurantId', $request->input('restaurantId'));
         }
 
-        // Add other filters as needed, e.g., search by name
         if ($request->has('name')) {
             $query->where('Name', 'like', '%' . $request->input('name') . '%');
         }
 
-        // Add pagination
-        $products = $query->paginate(15); // Get 15 products per page
+        $products = $query->paginate(15);
 
         return ProductResource::collection($products);
     }
 
     /**
-     * Store a newly created resource in storage.
-     * POST /api/products
+     * Store a newly created product.
      */
     public function store(CreateProductRequest $request)
     {
-        // Authorization and Validation handled by CreateProductRequest
         $product = Product::create($request->validated());
 
-        // Load relationships for the response
         $product->load(['category', 'restaurant']);
 
         return (new ProductResource($product))
@@ -58,39 +51,32 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     * GET /api/products/{product}
+     * Display the specified product.
      */
-    public function show(Product $product) // Route-model binding
+    public function show(Product $product)
     {
-        // Eager load relationships for the single resource response
         $product->load(['category', 'restaurant']);
         return new ProductResource($product);
     }
 
     /**
-     * Update the specified resource in storage.
-     * PUT/PATCH /api/products/{product}
+     * Update the specified product.
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        // Authorization and Validation handled by UpdateProductRequest
         $product->update($request->validated());
 
         $product->load(['category', 'restaurant']);
-        return new ProductResource($product); // Return the updated resource
+        return new ProductResource($product);
     }
 
     /**
-     * Remove the specified resource from storage.
-     * DELETE /api/products/{product}
+     * Remove the specified product.
      */
     public function destroy(Product $product)
     {
-        // TODO: Add checks if product is in active orders, etc., if needed
-        // For now, simple delete
         $product->delete();
 
-        return response()->noContent(); // 204 No Content
+        return response()->noContent();
     }
 }
