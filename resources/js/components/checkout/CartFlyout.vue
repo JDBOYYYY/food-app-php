@@ -11,11 +11,9 @@
       v-if="cart.isFlyoutOpen"
       class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-xl z-50 flex flex-col"
     >
-      <!-- Header -->
       <div class="flex items-center justify-between p-4 border-b">
         <div>
           <h2 class="text-lg font-bold text-gray-900">Your Cart</h2>
-          <!-- RESTAURANT NAME SUBHEADER -->
           <p
             v-if="cart.getCartRestaurantName"
             class="text-sm text-gray-500 -mt-1"
@@ -31,7 +29,6 @@
         </button>
       </div>
 
-      <!-- Empty State -->
       <div
         v-if="cart.itemCount === 0"
         class="flex-1 flex flex-col items-center justify-center text-center p-8"
@@ -45,13 +42,12 @@
         </p>
       </div>
 
-      <!-- Cart Items -->
       <div v-else class="flex-1 overflow-y-auto p-4 space-y-4">
         <div v-for="item in cart.items" :key="item.id" class="flex gap-4">
           <img
             :src="
               item.image ||
-              'https://placehold.co/100x100/e2e8f0/4a5568?text=Item'
+              'https:
             "
             :alt="item.name"
             class="h-20 w-20 rounded-lg object-cover"
@@ -88,7 +84,6 @@
         </div>
       </div>
 
-      <!-- Footer -->
       <div v-if="cart.itemCount > 0" class="p-4 border-t bg-gray-50">
         <div class="flex justify-between font-bold text-lg mb-4">
           <span>Subtotal</span>

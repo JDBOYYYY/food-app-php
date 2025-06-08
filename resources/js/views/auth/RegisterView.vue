@@ -1,6 +1,5 @@
 <template>
     <div class="flex min-h-screen">
-        <!-- Left side - Register form -->
         <div class="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
             <div class="w-full max-w-md space-y-8">
                 <div>
@@ -134,11 +133,10 @@
             </div>
         </div>
 
-        <!-- Right side - Image -->
         <div class="hidden lg:block lg:w-1/2 bg-gradient-to-br from-gray-700 to-gray-800 relative overflow-hidden">
             <div class="absolute inset-0 flex items-center justify-center">
                 <img
-                    src="https://images.unsplash.com/photo-1505932049984-db368d92fa63?q=80&w=2536&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    src="https:
                     alt="Ilustracja rejestracji"
                     class="w-full h-full object-cover"
                 />

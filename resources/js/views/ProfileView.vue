@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Nagłówek Profilu -->
     <div class="bg-white shadow-sm">
       <div class="container mx-auto px-4 py-8">
         <div class="flex items-center gap-6">
@@ -35,10 +34,8 @@
       </div>
     </div>
 
-    <!-- Zawartość Profilu -->
     <div class="container mx-auto px-4 py-8">
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <!-- Nawigacja Boczna -->
         <div class="lg:col-span-1">
           <div
             class="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
@@ -62,7 +59,6 @@
           </div>
         </div>
 
-        <!-- Główna Zawartość - dynamicznie renderowany komponent -->
         <div class="lg:col-span-3">
           <component :is="activeComponent" />
         </div>
@@ -115,24 +111,19 @@ const user = computed(() => {
   };
 });
 
-// NEW LOGIC: Watch for changes to the active tab and save to localStorage
 watch(activeTab, (newTab) => {
   localStorage.setItem("lastProfileTab", newTab);
 });
 
-// NEW LOGIC: On mount, check URL query then localStorage to set the initial tab
 onMounted(() => {
   const queryTab = route.query.tab;
   const savedTab = localStorage.getItem("lastProfileTab");
   const validTabIds = tabs.value.map((t) => t.id);
 
   if (queryTab && validTabIds.includes(queryTab)) {
-    // Priority 1: Set tab from URL query parameter
     activeTab.value = queryTab;
   } else if (savedTab && validTabIds.includes(savedTab)) {
-    // Priority 2: Set tab from localStorage
     activeTab.value = savedTab;
   }
-  // Priority 3: Default to 'personal' (already set in ref)
 });
 </script>

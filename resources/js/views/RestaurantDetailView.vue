@@ -53,7 +53,6 @@ import { useAuthStore } from "../stores/auth";
 import type { ProductDto, RestaurantDetailDto } from "../services/types";
 import { useModalStore } from "../stores/modals";
 
-// Import the new components
 import RestaurantHero from "../components/restaurant/RestaurantHero.vue";
 import MenuList from "../components/restaurant/MenuList.vue";
 import OrderSummary from "../components/restaurant/OrderSummary.vue";
@@ -84,7 +83,7 @@ const addToBasket = (product: ProductDto) => {
     name: product.Name,
     price: product.Price,
     restaurantId: restaurant.value.Id,
-    restaurantName: restaurant.value.Name, // <-- ADDED RESTAURANT NAME
+    restaurantName: restaurant.value.Name,
     image: product.ImageUrl,
   });
 };
@@ -109,7 +108,6 @@ const toggleFavorite = async () => {
 
   const newStatus = !restaurant.value.isFavorite;
   try {
-    // This would call a real service in the future
     restaurant.value.isFavorite = newStatus;
   } catch (e: any) {
     alert(`Error: ${e.message}`);
@@ -153,7 +151,7 @@ const handleToggleProductFavorite = async (
     }
   } catch (e) {
     console.error("Failed to update product favorite status:", e);
-    if (product) product.isFavorite = !newStatus; // Revert on error
+    if (product) product.isFavorite = !newStatus;
   }
 };
 </script>

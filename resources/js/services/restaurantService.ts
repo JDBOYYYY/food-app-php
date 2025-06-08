@@ -7,14 +7,12 @@ import type {
 } from "./types";
 import type { RestaurantListItemProps } from "../components/RestaurantListItem.vue";
 import { favoriteService } from "./favoriteService";
-import { useAuthStore } from "../stores/auth"; // <-- IMPORT THE AUTH STORE
+import { useAuthStore } from "../stores/auth";
 
-// This interface is for internal use within the service
 interface CategoryWithIcon extends CategoryDto {
   icon?: string;
 }
 
-// This is the shape of the data the service will provide to the HomeView
 export interface HomePageData {
   restaurants: RestaurantListItemProps[];
   categories: CategoryWithIcon[];
@@ -88,23 +86,19 @@ export const restaurantService = {
     }
   },
 
-  // --- REFACTORED THIS ENTIRE FUNCTION ---
   async getRestaurantPageData(
     restaurantId: number,
   ): Promise<RestaurantDetailDto> {
     const auth = useAuthStore();
 
-    // 1. Always fetch the public restaurant data
     const restaurantResponse = await apiClient<{ data: RestaurantDetailDto }>(
       `/api/restaurants/${restaurantId}`,
     );
     const restaurantData = restaurantResponse.data;
 
-    // 2. Initialize favorite data as empty/false
     let favoriteProductIds = new Set<number>();
     let isRestaurantFavorite = false;
 
-    // 3. If the user is logged in, fetch their private favorites data
     if (auth.isAuthenticated) {
       try {
         const favoritesResponse = await favoriteService.getUserFavorites();
@@ -122,7 +116,6 @@ export const restaurantService = {
       }
     }
 
-    // 4. Map favorite status to products
     if (restaurantData.Products) {
       restaurantData.Products = restaurantData.Products.map((product) => ({
         ...product,
@@ -130,7 +123,6 @@ export const restaurantService = {
       }));
     }
 
-    // 5. Add mock data and final favorite status
     restaurantData.isOpen = Math.random() > 0.2;
     restaurantData.reviewCount = Math.floor(Math.random() * 200) + 50;
     restaurantData.description =

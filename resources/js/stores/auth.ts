@@ -3,17 +3,13 @@ import { ref, computed } from 'vue';
 import { authService, type LoginDto, type RegisterDto, type UserDto } from '../services';
 
 export const useAuthStore = defineStore('auth', () => {
-  // --- STATE ---
   const token = ref<string | null>(localStorage.getItem('userToken'));
-  // The user object will now be stored directly
   const user = ref<UserDto | null>(JSON.parse(localStorage.getItem('user') || 'null'));
   const loading = ref(true);
 
-  // --- GETTERS ---
   const isAuthenticated = computed(() => !!token.value && !!user.value);
   const isAdmin = computed(() => user.value?.role === 'admin');
 
-  // --- ACTIONS ---
   function setUserAndToken(newToken: string | null, newUser: UserDto | null) {
     token.value = newToken;
     user.value = newUser;
@@ -51,7 +47,6 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function signOut() {
     setUserAndToken(null, null);
-    // The router guard will handle redirection
   }
 
   function checkAuthStatus() {

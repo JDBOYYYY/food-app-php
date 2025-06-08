@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <!-- Loading State -->
     <div v-if="isLoading" class="flex justify-center items-center h-[80vh]">
       <div class="text-center">
         <div
@@ -10,7 +9,6 @@
       </div>
     </div>
 
-    <!-- Error State -->
     <div
       v-else-if="error"
       class="flex flex-col justify-center items-center h-[80vh] text-center p-4"
@@ -27,12 +25,10 @@
       </button>
     </div>
 
-    <!-- Main container for proper layout -->
     <div
       v-else-if="order"
       class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
     >
-      <!-- Header -->
       <div class="flex items-center justify-between mb-6">
         <div>
           <h1 class="text-3xl font-bold text-gray-900">
@@ -53,9 +49,7 @@
         </div>
       </div>
 
-      <!-- Two-column grid for map and details -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        <!-- Left Column: Map -->
         <div class="lg:col-span-2">
           <div
             id="map"
@@ -63,9 +57,7 @@
           ></div>
         </div>
 
-        <!-- Right Column: Details -->
         <div class="lg:col-span-1 space-y-6">
-          <!-- Driver Details Card -->
           <div class="bg-white p-6 rounded-lg shadow-md">
             <h3 class="font-bold text-lg mb-4">Your Driver</h3>
             <div class="flex items-center space-x-4">
@@ -85,7 +77,6 @@
             </div>
           </div>
 
-          <!-- Order Status Card -->
           <div class="bg-white p-6 rounded-lg shadow-md">
             <h3 class="font-bold text-lg mb-4">Live Status</h3>
             <div class="space-y-4">
@@ -108,7 +99,6 @@
             </div>
           </div>
 
-          <!-- Order Summary Card -->
           <div class="bg-white p-6 rounded-lg shadow-md">
             <h3 class="font-bold text-lg mb-4">Order Summary</h3>
             <div class="space-y-2 text-sm">
@@ -141,9 +131,6 @@ import { useRoute, useRouter } from "vue-router";
 import { orderService } from "@/services";
 import { Star, CheckCircle } from "lucide-vue-next";
 
-// REMOVED: The problematic top-level static imports are gone.
-// import "leaflet-routing-machine";
-// import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 
 const route = useRoute();
 const router = useRouter();
@@ -173,18 +160,18 @@ const initializeMap = async () => {
     delete L.Icon.Default.prototype._getIconUrl;
     L.Icon.Default.mergeOptions({
       iconRetinaUrl:
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+        "https:
       iconUrl:
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+        "https:
       shadowUrl:
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+        "https:
     });
 
     const restaurantIcon = new L.Icon({
       iconUrl:
         "data:image/svg+xml;base64," +
         btoa(
-          `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#f97316"/><path d="M12 8v16M16 8v16M20 8v4c0 2-1 3-2 3s-2-1-2-3V8" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>`,
+          `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http:
         ),
       iconSize: [32, 32],
       iconAnchor: [16, 32],
@@ -194,7 +181,7 @@ const initializeMap = async () => {
       iconUrl:
         "data:image/svg+xml;base64," +
         btoa(
-          `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#ef4444"/><path d="M16 8c-4 0-7 3-7 7 0 7 7 13 7 13s7-6 7-13c0-4-3-7-7-7z" fill="white"/><circle cx="16" cy="15" r="3" fill="#ef4444"/></svg>`,
+          `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http:
         ),
       iconSize: [32, 32],
       iconAnchor: [16, 32],
@@ -204,7 +191,7 @@ const initializeMap = async () => {
       iconUrl:
         "data:image/svg+xml;base64," +
         btoa(
-          `<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="#3b82f6" stroke="white" stroke-width="2"/><path d="M20 12 L28 28 H12 Z" fill="white" transform="rotate(0 20 20)"/></svg>`,
+          `<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http:
         ),
       iconSize: [40, 40],
       iconAnchor: [20, 20],
@@ -219,10 +206,10 @@ const initializeMap = async () => {
     L.control.zoom({ position: "bottomright" }).addTo(mapInstance);
 
     L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+      "https:
       {
         attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          '&copy; <a href="https:
       },
     ).addTo(mapInstance);
 

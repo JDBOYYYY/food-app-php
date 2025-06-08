@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
-import { useModalStore } from "./modals"; // Import modal store
+import { useModalStore } from "./modals";
 
 export interface CartItem {
   id: string;

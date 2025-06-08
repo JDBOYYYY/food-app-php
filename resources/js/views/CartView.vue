@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <!-- Header -->
     <div class="bg-white shadow-sm">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <h1 class="text-3xl font-bold text-gray-900">Your Cart</h1>
@@ -8,7 +7,6 @@
       </div>
     </div>
 
-    <!-- Main Content -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div
         v-if="cart.items.length === 0"
@@ -28,9 +26,7 @@
       </div>
 
       <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        <!-- Cart Items List -->
         <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
-          <!-- RESTAURANT NAME HEADER -->
           <div v-if="cart.getCartRestaurantName" class="mb-6 pb-4 border-b">
             <h3 class="text-xl font-bold text-gray-800">
               Order from: {{ cart.getCartRestaurantName }}
@@ -45,7 +41,7 @@
               <img
                 :src="
                   item.image ||
-                  'https://placehold.co/100x100/e2e8f0/4a5568?text=Item'
+                  'https:
                 "
                 :alt="item.name"
                 class="h-16 w-16 rounded-lg object-cover"
@@ -83,7 +79,6 @@
           </div>
         </div>
 
-        <!-- Order Summary Sidebar -->
         <div class="lg:col-span-1">
           <div
             class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-24"

@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <!-- Header -->
     <div class="bg-white shadow-sm">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <h1 class="text-3xl font-bold text-gray-900">Checkout</h1>
@@ -8,15 +7,12 @@
       </div>
     </div>
 
-    <!-- Main Content -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        <!-- Address & Payment Column -->
         <div class="lg:col-span-2 space-y-6">
           <AddressManager v-model="selectedAddressId" />
         </div>
 
-        <!-- Final Order Summary -->
         <div class="lg:col-span-1">
           <div
             class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-24"
@@ -43,7 +39,6 @@
         </div>
       </div>
     </div>
-    <!-- MODAL IS BACK -->
     <OrderConfirmation
       v-if="showOrderConfirmation && confirmedOrder"
       :orderId="confirmedOrder.Id"
@@ -96,7 +91,7 @@ const placeOrder = async () => {
 
     cart.clearCart();
     confirmedOrder.value = newOrder;
-    showOrderConfirmation.value = true; // Show the modal instead of redirecting
+    showOrderConfirmation.value = true;
   } catch (error: any) {
     orderError.value = error.message || "Failed to place order.";
   } finally {

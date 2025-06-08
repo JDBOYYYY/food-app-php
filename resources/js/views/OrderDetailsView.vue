@@ -1,13 +1,11 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <!-- Loading State -->
     <div v-if="isLoading" class="flex justify-center items-center h-screen">
       <div
         class="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500"
       ></div>
     </div>
 
-    <!-- Error State -->
     <div
       v-else-if="error"
       class="flex flex-col justify-center items-center h-screen text-center px-4"
@@ -24,9 +22,7 @@
       </button>
     </div>
 
-    <!-- Main Content -->
     <div v-else-if="order" class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <!-- Header -->
       <div class="flex items-center gap-4 mb-8">
         <button
           @click="router.back()"
@@ -45,7 +41,6 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        <!-- Left Column: Order Items -->
         <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
           <h3 class="text-xl font-bold text-gray-900 mb-4">Items in Order</h3>
           <div class="space-y-4">
@@ -57,7 +52,7 @@
               <img
                 :src="
                   item.product.ImageUrl ||
-                  'https://placehold.co/100x100/e2e8f0/4a5568?text=Item'
+                  'https:
                 "
                 :alt="item.product.Name"
                 class="h-16 w-16 rounded-lg object-cover"
@@ -77,7 +72,6 @@
           </div>
         </div>
 
-        <!-- Right Column: Summary & Address -->
         <div class="lg:col-span-1 space-y-6 sticky top-24">
           <div class="bg-white rounded-lg shadow-sm p-6">
             <h3 class="text-lg font-bold text-gray-900 mb-4">

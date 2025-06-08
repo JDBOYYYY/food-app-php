@@ -1,7 +1,6 @@
 <template>
   <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
     <h2 class="text-2xl font-bold text-gray-900 mb-4">Menu</h2>
-    <!-- Category Filter Buttons -->
     <div class="flex gap-2 overflow-x-auto pb-4 scrollbar-hide mb-6">
       <button
         @click="emit('update:selectedCategory', null)"
@@ -29,9 +28,7 @@
       </button>
     </div>
 
-    <!-- Product List -->
     <div class="space-y-4">
-      <!-- THIS IS THE FIX: We check if item exists before rendering -->
       <template v-for="item in filteredMenuItems" :key="item.Id">
         <ProductListItem
           v-if="item"
@@ -63,7 +60,6 @@ const menuCategories = computed(() => {
   if (!props.products) return [];
   const categories = new Map<number, string>();
   props.products.forEach((p) => {
-    // Safety check for p and p.Category
     if (p && p.CategoryId && p.Category?.Name) {
       categories.set(p.CategoryId, p.Category.Name);
     }
@@ -72,7 +68,6 @@ const menuCategories = computed(() => {
 });
 
 const filteredMenuItems = computed(() => {
-  // Safety check for props.products
   if (!Array.isArray(props.products)) return [];
   
   if (props.selectedCategory === null) {

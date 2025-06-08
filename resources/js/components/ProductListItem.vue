@@ -1,5 +1,4 @@
 <template>
-  <!-- Main container with dynamic classes -->
   <div
     :class="[
       'bg-white rounded-lg shadow-sm border border-gray-200 flex items-center gap-4 p-4',
@@ -73,7 +72,7 @@ watch(
   },
 );
 
-const defaultImage = 'https://placehold.co/100x100/e2e8f0/4a5568?text=Item';
+const defaultImage = 'https:
 const imageSource = computed(() =>
   props.item.ImageUrl && props.item.ImageUrl.startsWith('http')
     ? props.item.ImageUrl

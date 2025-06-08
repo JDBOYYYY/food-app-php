@@ -2,17 +2,14 @@
   <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
     <h2 class="text-2xl font-bold text-gray-900 mb-6">Historia Zamówień</h2>
 
-    <!-- Stan ładowania -->
     <div v-if="ordersLoading" class="text-center text-gray-500 py-8">
       <p>Ładowanie historii zamówień...</p>
     </div>
 
-    <!-- Stan błędu -->
     <div v-else-if="ordersError" class="text-center text-red-500 py-8">
       <p>{{ ordersError }}</p>
     </div>
 
-    <!-- Stan z danymi (lub pusty) -->
     <div v-else>
       <div v-if="orders.length === 0" class="text-center text-gray-500 py-8">
         <p>Nie masz jeszcze żadnych zamówień.</p>
@@ -57,7 +54,6 @@
             >
               {{ order.Status }}
             </span>
-            <!-- UPDATED BUTTON -->
             <button
               @click="goToDetails(order.Id)"
               class="text-orange-500 text-sm font-medium hover:text-orange-600 transition-colors"

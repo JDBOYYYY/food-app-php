@@ -11,17 +11,14 @@
       </button>
     </div>
 
-    <!-- Loading State -->
     <div v-if="isLoading" class="text-center py-4">
       <p class="text-gray-500">Loading addresses...</p>
     </div>
 
-    <!-- Error State -->
     <div v-else-if="error" class="text-center py-4 text-red-500">
       <p>{{ error }}</p>
     </div>
 
-    <!-- Address List -->
     <div v-else-if="!isAddingAddress" class="space-y-4">
       <div v-if="addresses.length === 0" class="text-center text-gray-500 py-4">
         <p>No saved addresses found. Please add one.</p>
@@ -58,7 +55,6 @@
       </div>
     </div>
 
-    <!-- Add New Address Form -->
     <div v-if="isAddingAddress" class="space-y-4">
       <input
         v-model="newAddress.Street"
@@ -101,7 +97,7 @@ import { addressService } from '../../services/index';
 import type { AddressDto, CreateAddressDto } from '../../services/types';
 
 const props = defineProps<{
-  modelValue: number | null; // For v-model binding
+  modelValue: number | null;
 }>();
 
 const emit = defineEmits(['update:modelValue']);
@@ -125,7 +121,6 @@ const fetchAddresses = async () => {
   try {
     const response = await addressService.getMyAddresses();
     addresses.value = response.data;
-    // If no address is selected and addresses exist, select the first one
     if (props.modelValue === null && addresses.value.length > 0) {
       selectAddress(addresses.value[0].Id);
     }
@@ -141,7 +136,6 @@ const selectAddress = (id: number) => {
 };
 
 const handleSaveAddress = async () => {
-  // Basic validation
   if (
     !newAddress.value.Street ||
     !newAddress.value.City ||
@@ -155,7 +149,6 @@ const handleSaveAddress = async () => {
     addresses.value.push(createdAddress.data);
     selectAddress(createdAddress.data.Id);
     isAddingAddress.value = false;
-    // Reset form
     newAddress.value = {
       Street: '',
       Apartment: '',

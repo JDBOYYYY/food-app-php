@@ -13,7 +13,6 @@ export const useModalStore = defineStore("modal", () => {
   const isOpen = ref(false);
   const options = ref<ModalOptions | null>(null);
 
-  // This will hold the 'resolve' function of the promise we return
   let _resolve: (value: boolean) => void;
 
   function show(opts: ModalOptions) {

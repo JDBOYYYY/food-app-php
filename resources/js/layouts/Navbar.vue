@@ -2,12 +2,10 @@
   <nav class="bg-white shadow-md sticky top-0 z-50">
     <div class="container mx-auto px-4">
       <div class="flex items-center justify-between h-16">
-        <!-- Logo -->
         <div class="flex items-center">
           <a href="/" class="text-2xl font-bold text-gray-900"> FoodApp </a>
         </div>
 
-        <!-- Navigation Links -->
         <div class="hidden md:block">
           <div class="ml-10 flex items-baseline space-x-8">
             <a
@@ -35,9 +33,7 @@
           </div>
         </div>
 
-        <!-- Right side -->
         <div class="flex items-center space-x-4">
-          <!-- Shopping Cart -->
           <button
             @click="cartStore.openFlyout()"
             class="relative p-2 text-gray-700 hover:text-orange-500 transition-colors"
@@ -51,7 +47,6 @@
             </span>
           </button>
 
-          <!-- User Menu -->
           <div
             v-if="authStore.isAuthenticated && authStore.user"
             class="relative"
@@ -71,7 +66,6 @@
               <ChevronDown class="h-4 w-4 text-gray-500" />
             </button>
 
-            <!-- Dropdown Menu -->
             <div
               v-if="showUserMenu"
               class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200"
@@ -115,7 +109,6 @@
             </div>
           </div>
 
-          <!-- Login/Register buttons -->
           <div v-else class="flex items-center space-x-3">
             <router-link
               to="/login"
@@ -131,7 +124,6 @@
             </router-link>
           </div>
 
-          <!-- Mobile menu button -->
           <button
             @click="showMobileMenu = !showMobileMenu"
             class="md:hidden p-2 rounded-md text-gray-700 hover:text-orange-500 hover:bg-gray-50 transition-colors"
@@ -142,7 +134,6 @@
         </div>
       </div>
 
-      <!-- Mobile menu -->
       <div v-if="showMobileMenu" class="md:hidden border-t border-gray-200">
         <div class="px-2 pt-2 pb-3 space-y-1">
           <a
@@ -176,7 +167,7 @@ import {
   Package,
   Settings,
   LogOut,
-  MapPin, // <-- IMPORTED MapPin ICON
+  MapPin,
 } from "lucide-vue-next";
 
 const authStore = useAuthStore();
@@ -193,7 +184,6 @@ const handleLogout = () => {
 };
 
 const handleClickOutside = (event) => {
-  // Close user menu if clicking outside of it
   if (showUserMenu.value && !event.target.closest(".relative")) {
     showUserMenu.value = false;
   }
