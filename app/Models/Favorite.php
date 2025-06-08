@@ -3,32 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-// For models representing pivot tables, extend Illuminate\Database\Eloquent\Relations\Pivot
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Model; // <-- Change from Pivot to Model
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Favorite extends Pivot // Extend Pivot for pivot models
+class Favorite extends Model // <-- Change from Pivot to Model
 {
     use HasFactory;
 
-    protected $table = 'Favorites'; // Explicitly set table name
+    protected $table = 'Favorites';
 
-    // Since this is a pivot model, Laravel expects foreign keys to be defined
-    // for the belongsToMany relationship. If you query this model directly,
-    // these relationships help.
+    // We now have a standard 'id' primary key, so we don't need these lines:
+    // public $incrementing = false;
+    // protected $primaryKey = ['UserId', 'ProductId'];
 
-    public $incrementing = false; // No auto-incrementing ID for this pivot model
-    protected $primaryKey = ['UserId', 'ProductId']; // Composite primary key
-                                                    // Note: Eloquent doesn't fully support composite PKs out of the box
-                                                    // for find() etc. Usually, you query by the individual keys.
-
-    // If your pivot table does not have created_at and updated_at timestamps
-    // (our migration for Favorites doesn't add them, only DateAdded)
-    public $timestamps = false; // Set to true if you add $table->timestamps() to the migration
+    public $timestamps = false;
 
     protected $fillable = [
         'UserId',
         'ProductId',
+        'RestaurantId', // <-- Add RestaurantId
         'DateAdded',
     ];
 
@@ -36,15 +29,18 @@ class Favorite extends Pivot // Extend Pivot for pivot models
         'DateAdded' => 'datetime',
     ];
 
-    // Relationship to User
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'UserId', 'id');
     }
 
-    // Relationship to Product
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'ProductId', 'Id');
+    }
+
+    public function restaurant(): BelongsTo
+    {
+        return $this->belongsTo(Restaurant::class, 'RestaurantId', 'Id');
     }
 }

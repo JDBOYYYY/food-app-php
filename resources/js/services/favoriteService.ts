@@ -1,24 +1,50 @@
 import apiClient from './apiClient';
+import type { ProductDto, RestaurantDto } from './types';
+
+// This is the shape of the object returned by the /api/favorites endpoint
+export interface AllFavoritesResponse {
+  products: ProductDto[];
+  restaurants: RestaurantDto[];
+}
 
 export const favoriteService = {
   /**
-   * Adds a restaurant to the user's favorites.
-   * The backend will get the user ID from the token.
+   * Fetches all of the user's favorite products and restaurants.
+   */
+  getUserFavorites: (): Promise<AllFavoritesResponse> => {
+    return apiClient<AllFavoritesResponse>('/api/favorites');
+  },
+
+  /**
+   * Adds a PRODUCT to the user's favorites.
+   */
+  addProductFavorite: (productId: number): Promise<void> => {
+    return apiClient(`/api/products/${productId}/favorite`, { method: 'POST' });
+  },
+
+  /**
+   * Removes a PRODUCT from the user's favorites.
+   */
+  removeProductFavorite: (productId: number): Promise<void> => {
+    return apiClient(`/api/products/${productId}/unfavorite`, {
+      method: 'DELETE',
+    });
+  },
+
+  /**
+   * Adds a RESTAURANT to the user's favorites.
    */
   addRestaurantFavorite: (restaurantId: number): Promise<void> => {
-    // The API endpoint from your mobile app was /api/favorites/restaurant/{id}
-    // We assume a similar structure. Adjust if your Laravel API is different.
-    // The backend should return a 201 or 204 status on success.
-    return apiClient(`/api/products/${restaurantId}/favorite`, {
+    return apiClient(`/api/restaurants/${restaurantId}/favorite`, {
       method: 'POST',
     });
   },
 
   /**
-   * Removes a restaurant from the user's favorites.
+   * Removes a RESTAURANT from the user's favorites.
    */
   removeRestaurantFavorite: (restaurantId: number): Promise<void> => {
-    return apiClient(`/api/products/${restaurantId}/unfavorite`, {
+    return apiClient(`/api/restaurants/${restaurantId}/unfavorite`, {
       method: 'DELETE',
     });
   },

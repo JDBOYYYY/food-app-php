@@ -61,9 +61,6 @@ class Product extends Model
 
     public function favoritedByUsers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'Favorites', 'ProductId', 'UserId')
-                    ->using(Favorite::class)       // Specify the custom pivot model
-                    ->withPivot('DateAdded');     // Include the extra pivot column
-                    
+        return $this->belongsToMany(User::class, 'favorite_products');
     }
 }

@@ -49,9 +49,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('order-items', OrderItemController::class);
     
     // Favorites
-    Route::get('/favorites', [UserFavoriteController::class, 'index'])->name('favorites.index');
-    Route::post('/products/{product}/favorite', [UserFavoriteController::class, 'store'])->name('products.favorite');
-    Route::delete('/products/{product}/unfavorite', [UserFavoriteController::class, 'destroy'])->name('products.unfavorite');
+    Route::get('/favorites', [UserFavoriteController::class, 'index']);
+    Route::post('/products/{product}/favorite', [UserFavoriteController::class, 'storeProduct']);
+    Route::delete('/products/{product}/unfavorite', [UserFavoriteController::class, 'destroyProduct']);
+
+    // Restaurant Favorites
+    Route::post('/restaurants/{restaurant}/favorite', [UserFavoriteController::class, 'storeRestaurant']);
+    Route::delete('/restaurants/{restaurant}/unfavorite', [UserFavoriteController::class, 'destroyRestaurant']);
     
     // Product reviews (authenticated)
     Route::post('/products/{product}/reviews', [ProductReviewController::class, 'store'])->name('products.reviews.store');

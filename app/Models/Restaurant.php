@@ -47,9 +47,7 @@ class Restaurant extends Model
 
     public function favoritedByUsers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'Favorites', 'ProductId', 'UserId')
-                    ->using(Favorite::class); // Specify the custom pivot model
-                    
+        return $this->belongsToMany(User::class, 'favorite_restaurants');
     }
 
     // We'll add RestaurantCategories relationship later

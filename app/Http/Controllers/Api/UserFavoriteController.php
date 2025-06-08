@@ -1,13 +1,14 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
-use Illuminate\Support\Facades\DB;
-use App\Http\Resources\ProductResource; // To return list of favorite products
+use App\Models\Restaurant;
 use Illuminate\Http\Response;
+use App\Http\Resources\ProductResource; // Import ProductResource
+use App\Http\Resources\RestaurantResource; // Import RestaurantResource
 
 class UserFavoriteController extends Controller
 {
@@ -16,49 +17,41 @@ class UserFavoriteController extends Controller
         $this->middleware('auth:sanctum');
     }
 
-    /**
-     * List the authenticated user's favorite products.
-     * GET /api/favorites
-     */
+    public function storeProduct(Request $request, Product $product)
+    {
+        $request->user()->favoriteProducts()->syncWithoutDetaching($product->Id);
+        return response()->json(['message' => 'Product added to favorites.'], Response::HTTP_CREATED);
+    }
+
+    public function destroyProduct(Request $request, Product $product)
+    {
+        $request->user()->favoriteProducts()->detach($product->Id);
+        return response()->noContent();
+    }
+
+    public function storeRestaurant(Request $request, Restaurant $restaurant)
+    {
+        $request->user()->favoriteRestaurants()->syncWithoutDetaching($restaurant->Id);
+        return response()->json(['message' => 'Restaurant added to favorites.'], Response::HTTP_CREATED);
+    }
+
+    public function destroyRestaurant(Request $request, Restaurant $restaurant)
+    {
+        $request->user()->favoriteRestaurants()->detach($restaurant->Id);
+        return response()->noContent();
+    }
+
     public function index(Request $request)
     {
         $user = $request->user();
 
+        // Eager load relationships to avoid N+1 query problems
+        $favoriteProducts = $user->favoriteProducts()->with(['category', 'restaurant'])->get();
+        $favoriteRestaurants = $user->favoriteRestaurants()->with('categories')->get();
 
-        // Eager load what ProductResource might need (category, restaurant)
-        $favoriteProducts = $user->favoriteProducts()->with(['category', 'restaurant'])->paginate(15);
-        return ProductResource::collection($favoriteProducts);
-    }
-
-    /**
-     * Add a product to the authenticated user's favorites.
-     * POST /api/products/{product}/favorite
-     */
-    public function store(Request $request, Product $product)
-    {
-        $user = $request->user();
-
-        // Attach if not already attached. syncWithoutDetaching adds if not present.
-        // The second argument to attach/sync is for extra pivot data.
-        $user->favoriteProducts()->syncWithoutDetaching([$product->Id => ['DateAdded' => now()]]);
-
-        return response()->json(['message' => 'Product added to favorites.'], Response::HTTP_CREATED);
-    }
-
-    /**
-     * Remove a product from the authenticated user's favorites.
-     * DELETE /api/products/{product}/unfavorite  (or /api/favorites/{product})
-     */
-    public function destroy(Request $request, Product $product)
-    {
-        $user = $request->user();
-
-        // Detach may fail with custom pivot models, so remove directly
-        \DB::table('Favorites')
-            ->where('UserId', $user->id)
-            ->where('ProductId', $product->Id)
-            ->delete();
-
-        return response()->noContent();
+        return response()->json([
+            'products' => ProductResource::collection($favoriteProducts),
+            'restaurants' => RestaurantResource::collection($favoriteRestaurants),
+        ]);
     }
 }

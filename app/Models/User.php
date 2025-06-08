@@ -61,9 +61,12 @@ class User extends Authenticatable
 
     public function favoriteProducts(): BelongsToMany
     {
-    return $this->belongsToMany(Product::class, 'Favorites', 'UserId', 'ProductId')
-                ->using(Favorite::class)       // Specify the custom pivot model
-                ->withPivot('DateAdded');     // Include the extra pivot column
+        return $this->belongsToMany(Product::class, 'favorite_products');
+    }
+
+    public function favoriteRestaurants(): BelongsToMany
+    {
+        return $this->belongsToMany(Restaurant::class, 'favorite_restaurants');
     }
 
     public function orders(): HasMany
