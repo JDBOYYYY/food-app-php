@@ -168,7 +168,7 @@
 import { ref, onMounted } from "vue";
 import { addressService } from "@/services/addressService";
 import { MapPin, Plus, Edit2, Trash2 } from "lucide-vue-next";
-import { useModalStore } from "../stores/modals";
+import { useModalStore } from "../../stores/modals";
 
 const addresses = ref([]);
 const addressesLoading = ref(false);

@@ -19,7 +19,6 @@ export const categoryService = {
     const response = await apiClient<PaginatedResponse<CategoryDto>>(
       '/api/categories',
     );
-    console.log(response.data)
     // We return only the 'data' part of the response, which is the array we need.
     return response.data;
   },

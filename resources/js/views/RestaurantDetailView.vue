@@ -110,9 +110,6 @@ const toggleFavorite = async () => {
   const newStatus = !restaurant.value.isFavorite;
   try {
     // This would call a real service in the future
-    console.log(
-      `Toggling favorite for ${restaurant.value.Id} to ${newStatus}`,
-    );
     restaurant.value.isFavorite = newStatus;
   } catch (e: any) {
     alert(`Error: ${e.message}`);

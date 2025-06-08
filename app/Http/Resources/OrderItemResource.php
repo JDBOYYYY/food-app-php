@@ -12,8 +12,17 @@ class OrderItemResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        // Be explicit to ensure all needed data is included
+        return [
+            'Id' => $this->Id,
+            'OrderId' => $this->OrderId,
+            'ProductId' => $this->ProductId,
+            'Quantity' => $this->Quantity,
+            'UnitPrice' => $this->UnitPrice,
+            // Use the ProductResource to ensure nested relationships like the restaurant are included
+            'product' => new ProductResource($this->whenLoaded('product')),
+        ];
     }
 }

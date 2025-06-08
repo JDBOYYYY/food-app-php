@@ -14,7 +14,6 @@
         <!-- Address & Payment Column -->
         <div class="lg:col-span-2 space-y-6">
           <AddressManager v-model="selectedAddressId" />
-          <!-- Payment component would go here -->
         </div>
 
         <!-- Final Order Summary -->
@@ -44,6 +43,7 @@
         </div>
       </div>
     </div>
+    <!-- MODAL IS BACK -->
     <OrderConfirmation
       v-if="showOrderConfirmation && confirmedOrder"
       :orderId="confirmedOrder.Id"
@@ -54,13 +54,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { useCartStore } from '../stores/cart';
-import { orderService } from '../services/index';
-import type { CreateOrderDto } from '../services/types';
-import AddressManager from '../components/checkout/AddressManager.vue';
-import OrderConfirmation from '../components/checkout/OrderConfirmation.vue';
+import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
+import { useCartStore } from "../stores/cart";
+import { orderService } from "../services/index";
+import type { CreateOrderDto, OrderDto } from "../services/types";
+import AddressManager from "../components/checkout/AddressManager.vue";
+import OrderConfirmation from "../components/checkout/OrderConfirmation.vue";
 
 const router = useRouter();
 const cart = useCartStore();
@@ -69,7 +69,6 @@ const selectedAddressId = ref<number | null>(null);
 const isPlacingOrder = ref(false);
 const orderError = ref<string | null>(null);
 
-// --- NEW STATE FOR THE MODAL ---
 const showOrderConfirmation = ref(false);
 const confirmedOrder = ref<OrderDto | null>(null);
 
@@ -96,25 +95,25 @@ const placeOrder = async () => {
     const newOrder = response.data;
 
     cart.clearCart();
-    confirmedOrder.value = newOrder; // <-- Store the confirmed order
-    showOrderConfirmation.value = true; // <-- Show the modal
+    confirmedOrder.value = newOrder;
+    showOrderConfirmation.value = true; // Show the modal instead of redirecting
   } catch (error: any) {
-    orderError.value = error.message || 'Failed to place order.';
+    orderError.value = error.message || "Failed to place order.";
   } finally {
     isPlacingOrder.value = false;
   }
 };
 
-// --- NEW METHODS FOR THE MODAL ---
 const trackOrder = () => {
   showOrderConfirmation.value = false;
-  // In the future, you would navigate to an order tracking page
-  // router.push(`/order/${confirmedOrder.value?.Id}`);
-  router.push('/'); // For now, just go home
+  router.push({
+    name: "DeliveryTracker",
+    params: { orderId: confirmedOrder.value?.Id },
+  });
 };
 
 const goToHome = () => {
   showOrderConfirmation.value = false;
-  router.push('/');
+  router.push("/");
 };
 </script>

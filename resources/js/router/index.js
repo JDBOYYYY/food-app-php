@@ -56,6 +56,13 @@ const routes = [
         props: true,
         meta: { requiresAuth: true },
       },
+      {
+        path: "track/:orderId",
+        name: "DeliveryTracker",
+        component: () => import("../views/DeliveryTracker.vue"),
+        props: true,
+        meta: { requiresAuth: true },
+      },
     ],
   },
 
