@@ -26,27 +26,15 @@ class Product extends Model
         'CategoryId',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
-        'Price' => 'decimal:2', // Ensure Price is treated as a decimal
+        'Price' => 'decimal:2',
     ];
 
-    /**
-     * Get the category that owns the product.
-     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'CategoryId', 'Id');
     }
 
-    /**
-     * Get the restaurant that owns the product.
-     * We'll create the Restaurant model next.
-     */
     public function restaurant(): BelongsTo
     {
         return $this->belongsTo(Restaurant::class, 'RestaurantId', 'Id');
@@ -55,9 +43,6 @@ class Product extends Model
     {
         return $this->hasMany(Review::class, 'ProductId', 'Id');
     }
-
-    // We'll add other relationships (Favorites, OrderItems, Reviews) later
-    // when those models are created.
 
     public function favoritedByUsers(): BelongsToMany
     {

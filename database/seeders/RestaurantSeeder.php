@@ -9,11 +9,7 @@ class RestaurantSeeder extends Seeder
 {
     public function run(): void
     {
-        // The main DatabaseSeeder will handle truncation.
-        // This seeder is now only for creating data.
-
         $restaurants = [
-            // Italian & Pizza
             [
                 'Name' => 'Pizzeria Ciao a Tutti',
                 'ImageUrl' => 'https://images.pexels.com/photos/1146760/pexels-photo-1146760.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -34,7 +30,6 @@ class RestaurantSeeder extends Seeder
                 'ImageUrl' => 'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=800',
                 'AverageRating' => 4.5, 'DeliveryTime' => '25-40 min', 'Distance' => '4.1 km', 'PriceRange' => '$$'
             ],
-            // Asian
             [
                 'Name' => 'Uki Uki',
                 'ImageUrl' => 'https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -60,7 +55,6 @@ class RestaurantSeeder extends Seeder
                 'ImageUrl' => 'https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg?auto=compress&cs=tinysrgb&w=800',
                 'AverageRating' => 4.7, 'DeliveryTime' => '40-55 min', 'Distance' => '6.0 km', 'PriceRange' => '$$$'
             ],
-            // Burgers & American
             [
                 'Name' => 'Barn Burger',
                 'ImageUrl' => 'https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -76,7 +70,6 @@ class RestaurantSeeder extends Seeder
                 'ImageUrl' => 'https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=800',
                 'AverageRating' => 4.4, 'DeliveryTime' => '30-45 min', 'Distance' => '3.7 km', 'PriceRange' => '$$'
             ],
-            // Korean & Chicken
             [
                 'Name' => 'Kura',
                 'ImageUrl' => 'https://images.pexels.com/photos/60616/fried-chicken-chicken-fried-crunchy-60616.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -87,7 +80,6 @@ class RestaurantSeeder extends Seeder
                 'ImageUrl' => 'https://images.pexels.com/photos/2474661/pexels-photo-2474661.jpeg?auto=compress&cs=tinysrgb&w=800',
                 'AverageRating' => 4.5, 'DeliveryTime' => '20-35 min', 'Distance' => '1.9 km', 'PriceRange' => '$'
             ],
-            // Middle Eastern & Vegan
             [
                 'Name' => 'Raj w Niebie',
                 'ImageUrl' => 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -98,19 +90,16 @@ class RestaurantSeeder extends Seeder
                 'ImageUrl' => 'https://images.pexels.com/photos/4099239/pexels-photo-4099239.jpeg?auto=compress&cs=tinysrgb&w=800',
                 'AverageRating' => 4.8, 'DeliveryTime' => '25-40 min', 'Distance' => '1.8 km', 'PriceRange' => '$$$'
             ],
-            // Mexican
             [
                 'Name' => 'La Sirena: The Mexican Food Cartel',
                 'ImageUrl' => 'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=800',
                 'AverageRating' => 4.6, 'DeliveryTime' => '25-40 min', 'Distance' => '3.3 km', 'PriceRange' => '$$'
             ],
-            // Seafood
             [
                 'Name' => 'Shrimp House',
                 'ImageUrl' => 'https://images.pexels.com/photos/1300972/pexels-photo-1300972.jpeg?auto=compress&cs=tinysrgb&w=800',
                 'AverageRating' => 4.6, 'DeliveryTime' => '25-40 min', 'Distance' => '2.1 km', 'PriceRange' => '$$'
             ],
-            // Polish & European
             [
                 'Name' => 'AiOLI Cantine Bar Cafe Deli',
                 'ImageUrl' => 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg?auto=compress&cs=tinysrgb&w=800',

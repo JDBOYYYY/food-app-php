@@ -6,13 +6,9 @@ use Illuminate\Database\Seeder;
 use App\Models\Review;
 use App\Models\User;
 use App\Models\Product;
-// use App\Models\Restaurant; // If you also want to seed restaurant reviews
 
 class ReviewSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $user1 = User::where('email', 'user@example.com')->first();
@@ -20,7 +16,6 @@ class ReviewSeeder extends Seeder
 
         $product1 = Product::where('Name', 'Margherita Pizza')->first();
         $product2 = Product::where('Name', 'Pepperoni Passion')->first();
-        // $restaurant1 = Restaurant::where('Name', 'Luigi\'s Pizza Place')->first();
 
         if (!$user1 || !$adminUser || !$product1) {
             $this->command->warn('Required users or products not found for ReviewSeeder. Skipping some reviews.');
@@ -28,7 +23,7 @@ class ReviewSeeder extends Seeder
 
         if ($user1 && $product1) {
             Review::updateOrCreate(
-                ['UserId' => $user1->id, 'ProductId' => $product1->Id], // Composite key to find/update
+                ['UserId' => $user1->id, 'ProductId' => $product1->Id],
                 [
                     'Rating' => 5,
                     'Comment' => 'The Margherita was amazing! Best in town.',
@@ -59,17 +54,6 @@ class ReviewSeeder extends Seeder
             );
         }
 
-        // Example for a restaurant review (if you implement that functionality)
-        // if ($user1 && $restaurant1) {
-        //     Review::updateOrCreate(
-        //         ['UserId' => $user1->id, 'RestaurantId' => $restaurant1->Id], // Assuming you add RestaurantId to Review model/table
-        //         [
-        //             'Rating' => 5,
-        //             'Comment' => 'Great atmosphere at Luigi\'s!',
-        //             'ReviewDate' => now()->subDays(rand(1,10)),
-        //         ]
-        //     );
-        // }
 
         $this->command->info('Reviews seeded.');
     }

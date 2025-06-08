@@ -11,17 +11,14 @@ class RestaurantCategorySeeder extends Seeder
 {
     public function run(): void
     {
-        // Clear the pivot table to ensure a clean slate on re-seeding
         DB::table('RestaurantCategories')->truncate();
 
-        // Get all categories and restaurants from the database
         $categories = Category::all()->keyBy('Name');
         $restaurants = Restaurant::all();
 
         foreach ($restaurants as $restaurant) {
             $assignedCategories = [];
 
-            // Assign categories based on keywords in the restaurant's name
             if (str_contains(strtolower($restaurant->Name), 'pizza')) {
                 if (isset($categories['Pizzas'])) {
                     $assignedCategories[] = $categories['Pizzas']->Id;
@@ -33,7 +30,7 @@ class RestaurantCategorySeeder extends Seeder
                 }
             }
             if (str_contains(strtolower($restaurant->Name), 'sushi')) {
-                if (isset($categories['Przystawki'])) { // Assuming Sushi is an appetizer category for now
+                if (isset($categories['Przystawki'])) {
                     $assignedCategories[] = $categories['Przystawki']->Id;
                 }
             }
@@ -58,15 +55,12 @@ class RestaurantCategorySeeder extends Seeder
                 }
             }
 
-            // If no categories were assigned based on name, assign a default one
             if (empty($assignedCategories)) {
                 if (isset($categories['Dania główne'])) {
                     $assignedCategories[] = $categories['Dania główne']->Id;
                 }
             }
 
-            // Attach the found categories to the restaurant
-            // syncWithoutDetaching prevents errors if a category is already attached
             $restaurant->categories()->syncWithoutDetaching($assignedCategories);
         }
     }

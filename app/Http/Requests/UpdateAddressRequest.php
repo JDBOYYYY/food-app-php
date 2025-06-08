@@ -6,8 +6,7 @@ class UpdateAddressRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // Will require user to own the address or be admin
-        return true; // Placeholder
+        return true;
     }
 
     public function rules(): array

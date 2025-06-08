@@ -15,7 +15,7 @@ class AddressResource extends JsonResource
             'PostalCode' => $this->PostalCode,
             'Country' => $this->Country,
             'UserId' => $this->UserId,
-            'user_name' => $this->whenLoaded('user', fn() => $this->user->name), // Example if you eager load user
+            'user_name' => $this->whenLoaded('user', fn() => $this->user->name),
         ];
     }
 }

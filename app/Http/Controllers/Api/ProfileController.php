@@ -15,9 +15,6 @@ class ProfileController extends Controller
         $this->middleware('auth:sanctum');
     }
 
-    /**
-     * Update the authenticated user's profile information.
-     */
     public function update(Request $request)
     {
         $user = $request->user();
@@ -32,9 +29,6 @@ class ProfileController extends Controller
         return response()->json($user);
     }
 
-    /**
-     * Update the authenticated user's password.
-     */
     public function changePassword(Request $request)
     {
         $user = $request->user();
@@ -44,7 +38,6 @@ class ProfileController extends Controller
             'new_password' => ['required', 'string', 'confirmed', Password::min(8)->mixedCase()->numbers()],
         ]);
 
-        // Check if the current password is correct
         if (!Hash::check($validated['current_password'], $user->password)) {
             throw ValidationException::withMessages([
                 'current_password' => 'Podane aktualne hasło jest nieprawidłowe.',

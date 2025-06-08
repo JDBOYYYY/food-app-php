@@ -36,23 +36,15 @@ class Restaurant extends Model
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(
-            Category::class,          // Related model
-            'RestaurantCategories',   // Pivot table name
-            'RestaurantId',           // Foreign key on pivot table related to current model (Restaurant)
-            'CategoryId'            // Foreign key on pivot table related to related model (Category)
+            Category::class,
+            'RestaurantCategories',
+            'RestaurantId',
+            'CategoryId'
         );
-        // If you want to access extra pivot table columns (if any): ->withPivot('column1', 'column2');
-        // If your pivot table has timestamps and you want them: ->withTimestamps();
     }
 
     public function favoritedByUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'favorite_restaurants');
     }
-
-    // We'll add RestaurantCategories relationship later
-    // public function categories()
-    // {
-    //     return $this->belongsToMany(Category::class, 'RestaurantCategories', 'RestaurantId', 'CategoryId');
-    // }
 }

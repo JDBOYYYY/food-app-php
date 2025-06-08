@@ -18,7 +18,6 @@ class AllEndpointsTest extends TestCase
         parent::setUp();
         Artisan::call('key:generate');
 
-        // create base records
         $this->user = User::factory()->create();
         $this->category = Category::create(['Name' => 'Category']);
         $this->restaurant = Restaurant::create([
@@ -78,7 +77,6 @@ class AllEndpointsTest extends TestCase
         $this->getJson('/api/favorites')->assertStatus(200)
             ->assertJsonCount(0, 'data');
       
-        // order creation
         $orderPayload = [
             'ShippingAddressId' => $this->address->Id,
             'BillingAddressId' => $this->address->Id,
@@ -93,7 +91,6 @@ class AllEndpointsTest extends TestCase
         $this->getJson('/api/orders/'.$orderId)->assertStatus(200);
         $this->putJson('/api/orders/'.$orderId, ['Status' => Order::STATUS_CANCELLED])->assertStatus(200);
         $this->deleteJson('/api/orders/'.$orderId)->assertStatus(204);
-        // address CRUD
         $resp = $this->postJson('/api/addresses', [
             'Street' => 'New',
             'Apartment' => '2',

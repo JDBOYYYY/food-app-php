@@ -6,8 +6,7 @@ class CreateAddressRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // Will require authenticated user later
-        return true; // Placeholder
+        return true;
     }
 
     public function rules(): array
@@ -18,7 +17,6 @@ class CreateAddressRequest extends FormRequest
             'City' => 'required|string|max:50',
             'PostalCode' => 'required|string|max:20',
             'Country' => 'required|string|max:50',
-            // UserId will be set from Auth::user()->id in the controller
         ];
     }
 }

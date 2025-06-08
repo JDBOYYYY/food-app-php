@@ -11,8 +11,6 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        // This seeder now ONLY creates data. Cleanup is handled in DatabaseSeeder.
-
         $categories = Category::all()->keyBy('Name');
         $restaurants = Restaurant::all()->keyBy('Name');
 
