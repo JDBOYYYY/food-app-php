@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <!-- Loading State -->
     <div v-if="isLoading" class="flex justify-center items-center h-[80vh]">
       <div class="text-center">
         <div
@@ -10,7 +9,6 @@
       </div>
     </div>
 
-    <!-- Error State -->
     <div
       v-else-if="error"
       class="flex flex-col justify-center items-center h-[80vh] text-center p-4"
@@ -27,12 +25,10 @@
       </button>
     </div>
 
-    <!-- Main container for proper layout -->
     <div
       v-else-if="order"
       class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
     >
-      <!-- Header -->
       <div class="flex items-center justify-between mb-6">
         <div>
           <h1 class="text-3xl font-bold text-gray-900">
@@ -53,9 +49,7 @@
         </div>
       </div>
 
-      <!-- Two-column grid for map and details -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        <!-- Left Column: Map -->
         <div class="lg:col-span-2">
           <div
             id="map"
@@ -63,9 +57,7 @@
           ></div>
         </div>
 
-        <!-- Right Column: Details -->
         <div class="lg:col-span-1 space-y-6">
-          <!-- Driver Details Card -->
           <div class="bg-white p-6 rounded-lg shadow-md">
             <h3 class="font-bold text-lg mb-4">Your Driver</h3>
             <div class="flex items-center space-x-4">
@@ -85,7 +77,6 @@
             </div>
           </div>
 
-          <!-- Order Status Card -->
           <div class="bg-white p-6 rounded-lg shadow-md">
             <h3 class="font-bold text-lg mb-4">Live Status</h3>
             <div class="space-y-4">
@@ -108,7 +99,6 @@
             </div>
           </div>
 
-          <!-- Order Summary Card -->
           <div class="bg-white p-6 rounded-lg shadow-md">
             <h3 class="font-bold text-lg mb-4">Order Summary</h3>
             <div class="space-y-2 text-sm">
@@ -141,9 +131,6 @@ import { useRoute, useRouter } from "vue-router";
 import { orderService } from "@/services";
 import { Star, CheckCircle } from "lucide-vue-next";
 
-// REMOVED: The problematic top-level static imports are gone.
-// import "leaflet-routing-machine";
-// import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 
 const route = useRoute();
 const router = useRouter();

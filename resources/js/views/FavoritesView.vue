@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <!-- Header -->
     <div class="bg-white shadow-sm">
       <div class="container mx-auto px-4 py-6">
         <div>
@@ -12,9 +11,7 @@
       </div>
     </div>
 
-    <!-- Content -->
     <div class="container mx-auto px-4 py-8">
-      <!-- Loading State -->
       <div v-if="isLoading" class="text-center py-16">
         <div
           class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"
@@ -22,7 +19,6 @@
         <p class="mt-4 text-gray-600">Loading your favorites...</p>
       </div>
 
-      <!-- Error State -->
       <div v-else-if="error" class="text-center py-16">
         <h3 class="text-xl font-semibold text-red-600 mb-2">
           Failed to load favorites
@@ -30,9 +26,7 @@
         <p class="text-gray-600">{{ error }}</p>
       </div>
 
-      <!-- Main Content -->
       <div v-else>
-        <!-- Favorite Restaurants Section -->
         <section class="mb-12">
           <h2 class="text-2xl font-bold text-gray-900 mb-6">
             Favorite Restaurants
@@ -71,7 +65,6 @@
           </TransitionGroup>
         </section>
 
-        <!-- Favorite Dishes Section -->
         <section>
           <h2 class="text-2xl font-bold text-gray-900 mb-6">
             Favorite Dishes
@@ -134,7 +127,7 @@ const mapRestaurantDtoToProps = (dto: any): RestaurantListItemProps => ({
   imageUrl: dto.ImageUrl,
   rating: dto.AverageRating,
   deliveryTime: dto.DeliveryTime,
-  isFavorite: true, // All items in this view are favorites
+  isFavorite: true,
   cuisineType:
     dto.Categories?.map((c: any) => c.Name).join(" • ") || "Various",
 });
@@ -160,12 +153,10 @@ const fetchFavorites = async () => {
   }
 };
 
-// Handler for unfavoriting a restaurant
 const handleRestaurantToggle = async (
   restaurantId: number,
   newStatus: boolean,
 ) => {
-  // In this view, we only handle removal (newStatus will be false)
   if (newStatus === true) return;
 
   try {
@@ -178,11 +169,10 @@ const handleRestaurantToggle = async (
     }
   } catch (e) {
     console.error("Failed to remove restaurant favorite:", e);
-    fetchFavorites(); // Re-sync on error
+    fetchFavorites();
   }
 };
 
-// Handler for unfavoriting a product
 const handleProductToggle = async (productId: number, newStatus: boolean) => {
   if (newStatus === true) return;
 
@@ -194,7 +184,7 @@ const handleProductToggle = async (productId: number, newStatus: boolean) => {
     }
   } catch (e) {
     console.error("Failed to remove product favorite:", e);
-    fetchFavorites(); // Re-sync on error
+    fetchFavorites();
   }
 };
 

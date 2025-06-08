@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('Categories', function (Blueprint $table) { // Match your C# table name
-            $table->id('Id'); // Corresponds to INT IDENTITY(1,1) PRIMARY KEY
-            $table->string('Name', 50)->unique(); // Corresponds to NVARCHAR(50) NOT NULL UNIQUE
-            // Laravel's $table->timestamps(); adds created_at and updated_at,
-            // Your .NET model doesn't have these explicitly, but they are good practice.
-            // If you don't want them, comment out the line below.
+        Schema::create('Categories', function (Blueprint $table) {
+            $table->id('Id');
+            $table->string('Name', 50)->unique();
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('Categories'); // Match your C# table name
+        Schema::dropIfExists('Categories');
     }
 };

@@ -58,7 +58,7 @@
 <script setup>
 import { ref } from "vue";
 import { profileService } from "@/services/profileService";
-import { ApiError } from "@/services/apiClient"; // Import the custom error
+import { ApiError } from "@/services/apiClient";
 
 const passwordForm = ref({
   current_password: "",
@@ -94,13 +94,11 @@ async function handleChangePassword() {
   } catch (e) {
     console.error("Błąd zmiany hasła:", e);
     if (e instanceof ApiError && e.response?.errors) {
-      // Handle Laravel's validation errors
       const errorKeys = Object.keys(e.response.errors);
       if (errorKeys.length > 0) {
         passwordError.value = e.response.errors[errorKeys[0]][0];
       }
     } else {
-      // Handle other API errors or generic errors
       passwordError.value = e.message || "Wystąpił nieznany błąd.";
     }
   } finally {

@@ -53,7 +53,6 @@
             <span>{{ total.toFixed(2) }} zł</span>
           </div>
         </div>
-        <!-- THIS BUTTON IS NOW FUNCTIONAL -->
         <button
           @click="goToCheckout"
           class="w-full bg-orange-500 text-white py-3 rounded-lg font-medium hover:bg-orange-600 transition-colors"
@@ -66,8 +65,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'; // <-- Added ref
-import { useRouter } from 'vue-router'; // <-- IMPORT ROUTER
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { ShoppingBag, Minus, Plus } from 'lucide-vue-next';
 import type { CartItem } from '../../stores/cart';
 
@@ -77,7 +76,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['updateQuantity']);
 
-const router = useRouter(); // <-- CREATE ROUTER INSTANCE
+const router = useRouter();
 
 const deliveryFee = ref(3.99);
 
@@ -90,8 +89,7 @@ const subtotal = computed(() =>
 
 const total = computed(() => subtotal.value + deliveryFee.value);
 
-// --- THIS IS THE NEW FUNCTION ---
 const goToCheckout = () => {
-  router.push('/cart'); // Navigate to the cart/checkout view
+  router.push('/cart');
 };
 </script>

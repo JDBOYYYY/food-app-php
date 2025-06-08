@@ -1,14 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 
-// Import Layouts
 import MainLayout from "../layouts/MainLayout.vue";
 
-// Define the application routes
 const routes = [
-  // =========================================
-  // Main User-Facing Application Layout
-  // =========================================
   {
     path: "/",
     component: MainLayout,
@@ -22,13 +17,12 @@ const routes = [
         path: "restaurant/:id",
         name: "RestaurantDetail",
         component: () => import("../views/RestaurantDetailView.vue"),
-        props: true, // This allows the :id to be passed as a prop
+        props: true,
       },
       {
         path: "cart",
         name: "Cart",
         component: () => import("../views/CartView.vue"),
-        // meta: { requiresAuth: true }, // Requires user to be logged in
       },
       {
         path: "checkout",
@@ -48,7 +42,6 @@ const routes = [
         component: () => import("../views/ProfileView.vue"),
         meta: { requiresAuth: true },
       },
-      // NEW ROUTE FOR ORDER DETAILS
       {
         path: "orders/:id",
         name: "OrderDetails",
@@ -66,14 +59,11 @@ const routes = [
     ],
   },
 
-  // =========================================
-  // Auth Routes (No Layout)
-  // =========================================
   {
     path: "/login",
     name: "Login",
     component: () => import("../views/auth/LoginView.vue"),
-    meta: { guestOnly: true }, // For logged-in users, redirect away
+    meta: { guestOnly: true },
   },
   {
     path: "/register",
@@ -82,9 +72,6 @@ const routes = [
     meta: { guestOnly: true },
   },
 
-  // =========================================
-  // Catch-all 404 Page
-  // =========================================
   {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
@@ -92,14 +79,11 @@ const routes = [
   },
 ];
 
-// Create the router instance
 const router = createRouter({
   history: createWebHistory(),
   routes,
 });
 
-// --- Navigation Guard ---
-// This function runs before every route change to protect pages.
 router.beforeEach((to, from, next) => {
   const auth = useAuthStore();
 
@@ -109,19 +93,15 @@ router.beforeEach((to, from, next) => {
   );
   const guestOnly = to.matched.some((record) => record.meta.guestOnly);
 
-  // If user is not logged in and tries to access a protected route
   if (requiresAuth && !auth.isAuthenticated) {
     next({ name: "Login" });
   }
-  // If user is not an admin and tries to access an admin route
   else if (requiresAdmin && !auth.isAdmin) {
-    next({ name: "Home" }); // Redirect to home page
+    next({ name: "Home" });
   }
-  // If a logged-in user tries to access Login or Register page
   else if (guestOnly && auth.isAuthenticated) {
     next({ name: "Home" });
   }
-  // Otherwise, allow navigation
   else {
     next();
   }

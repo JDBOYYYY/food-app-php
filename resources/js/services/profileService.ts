@@ -1,4 +1,3 @@
-// src/services/profileService.ts
 import apiClient from "./apiClient";
 import type { UserDto } from "./types";
 

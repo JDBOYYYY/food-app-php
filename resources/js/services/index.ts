@@ -6,4 +6,3 @@ export * from './favoriteService';
 export * from './addressService';
 export * from './orderService';
 export * from './types'
-// Add other services here as we create them

@@ -5,5 +5,4 @@
 </template>
 
 <script setup>
-// Router handles component rendering
 </script>

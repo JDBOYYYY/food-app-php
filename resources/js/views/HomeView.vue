@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Hero Section -->
     <section
       class="bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 text-white"
     >
@@ -28,21 +27,18 @@
     </section>
 
     <section class="py-8 bg-white">
-      <!-- The container class is removed from the parent and applied to the header -->
       <div class="container mx-auto px-4">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-2xl font-bold text-gray-900">Browse by Category</h2>
         </div>
       </div>
 
-      <!-- Changed from horizontal scroll to flex wrap -->
       <div class="container mx-auto px-4">
         <div
           class="flex flex-wrap gap-4"
           role="tablist"
           aria-orientation="horizontal"
         >
-          <!-- "All" button is now a real button that clears the filter -->
           <button
             @click="selectedCategory = null"
             role="tab"
@@ -57,7 +53,6 @@
             All
           </button>
 
-          <!-- The rest of the category buttons - now toggleable -->
           <button
             v-for="category in categories"
             :key="category.Id"
@@ -81,7 +76,6 @@
       </div>
     </section>
 
-    <!-- All Restaurants Section -->
     <section class="py-12 bg-gray-50">
       <div class="container mx-auto px-4">
         <div class="flex items-center justify-between mb-8">

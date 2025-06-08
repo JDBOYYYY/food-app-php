@@ -1,5 +1,4 @@
 <?php
-// In ..._create_restaurants_table.php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +11,7 @@ return new class extends Migration
             $table->id('Id');
             $table->string('Name', 150);
             $table->string('ImageUrl', 1024)->nullable();
-            $table->float('AverageRating')->nullable(); // Or $table->decimal('AverageRating', 2, 1) for specific precision
+            $table->float('AverageRating')->nullable();
             $table->string('DeliveryTime', 50)->nullable();
             $table->string('Distance', 50)->nullable();
             $table->string('PriceRange', 50)->nullable();

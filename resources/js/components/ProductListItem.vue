@@ -1,5 +1,4 @@
 <template>
-  <!-- Main container with dynamic classes -->
   <div
     :class="[
       'bg-white rounded-lg shadow-sm border border-gray-200 flex items-center gap-4 p-4',

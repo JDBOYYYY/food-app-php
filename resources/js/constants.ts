@@ -1,1 +1,1 @@
-export const API_URL = 'http://localhost:8000'; // Your Laravel backend URL
+export const API_URL = 'http://localhost:8000';

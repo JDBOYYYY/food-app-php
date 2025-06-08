@@ -13,7 +13,6 @@
         class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
       />
 
-      <!-- Status and Promo Badges -->
       <div class="absolute top-3 left-3 flex gap-2">
         <span
           v-if="item.isOpen !== undefined"
@@ -32,7 +31,6 @@
         </span>
       </div>
 
-      <!-- Favorite Button -->
       <button
         v-if="onToggleFavorite"
         @click.stop="handleFavoritePress"
@@ -53,7 +51,6 @@
         ></div>
       </button>
 
-      <!-- Restaurant Info Overlay -->
       <div class="absolute bottom-3 left-3 right-3">
         <h3 class="text-white font-bold text-lg mb-1 drop-shadow-md">
           {{ item.name }}
@@ -158,7 +155,6 @@ const handleFavoritePress = async () => {
   const newStatus = !isFavoriteLocal.value;
 
   try {
-    // Call the function passed from the parent component
     await props.onToggleFavorite(props.item.id, newStatus);
     isFavoriteLocal.value = newStatus;
   } catch (error: any) {

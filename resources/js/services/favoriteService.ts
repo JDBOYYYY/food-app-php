@@ -1,7 +1,6 @@
 import apiClient from './apiClient';
 import type { ProductDto, RestaurantDto } from './types';
 
-// This is the shape of the object returned by the /api/favorites endpoint
 export interface AllFavoritesResponse {
   products: ProductDto[];
   restaurants: RestaurantDto[];

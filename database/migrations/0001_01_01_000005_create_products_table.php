@@ -18,11 +18,11 @@ return new class extends Migration
             $table->unsignedBigInteger('RestaurantId');
             $table->foreign('RestaurantId', 'FK_Products_Restaurants')
                 ->references('Id')->on('Restaurants')
-                ->onDelete('cascade'); // 'cascade' is fine and supported
+                ->onDelete('cascade');
 
             $table->unsignedBigInteger('CategoryId');
             $table->foreign('CategoryId', 'FK_Products_Categories')
-                ->references('Id')->on('Categories'); // REMOVED onDelete('restrict')
+                ->references('Id')->on('Categories');
 
             $table->timestamps();
         });

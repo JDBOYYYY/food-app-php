@@ -1,7 +1,4 @@
-// This file will hold all the Data Transfer Object (DTO) types
-// that align with your Laravel backend.
 
-// --- Auth ---
 export interface LoginDto {
   email: string;
   password: string;
@@ -21,7 +18,6 @@ export interface LoginResponseDto {
   user: UserDto;
 }
 
-// --- User ---
 export interface UserDto {
   id: number;
   name: string;
@@ -31,13 +27,11 @@ export interface UserDto {
   updated_at: string;
 }
 
-// --- Category ---
 export interface CategoryDto {
   Id: number;
   Name: string;
 }
 
-// --- Restaurant ---
 export interface RestaurantDto {
   Id: number;
   Name: string;
@@ -51,14 +45,12 @@ export interface RestaurantDto {
 
 export interface RestaurantDetailDto extends RestaurantDto {
   Products: ProductDto[];
-  // Add these new properties
   isOpen?: boolean;
   reviewCount?: number;
   description?: string;
   isFavorite?: boolean;
 }
 
-// --- Product ---
 export interface ProductDto {
   Id: number;
   Name: string;
@@ -80,7 +72,6 @@ export interface AddressDto {
   Country: string;
 }
 
-// ... (other types like AddressDto, CreateOrderDto)
 
 export interface OrderItemDto {
   Id: number;
@@ -98,7 +89,6 @@ export interface AddressDto {
   Country: string;
 }
 
-// --- ADD THIS INTERFACE ---
 export interface CreateAddressDto {
   Street: string;
   Apartment?: string | null;
@@ -107,35 +97,30 @@ export interface CreateAddressDto {
   Country: string;
 }
 
-// ... (keep all other DTOs like AddressDto, ProductDto, etc.)
 
-// --- Order & OrderItem DTOs ---
 
-// Describes a Product object when it's nested inside an OrderItem
 export interface NestedProductInOrderDto {
   Id: number;
   Name: string;
   Description: string | null;
-  Price: string; // API sends price as a string here
+  Price: string;
   ImageUrl: string | null;
 }
 
-// Describes an OrderItem object as returned by the API inside an Order
 export interface OrderItemDto {
   Id: number;
   OrderId: string;
   ProductId: string;
   Quantity: number;
-  UnitPrice: string; // API sends price as a string here
+  UnitPrice: string;
   product: NestedProductInOrderDto;
 }
 
-// Describes the full Order object returned by the API
 export interface OrderDto {
   Id: number;
   UserId: number;
   UserName: string;
-  OrderDate: string; // ISO 8601 date string
+  OrderDate: string;
   TotalAmount: number;
   Status: string;
   ShippingAddressId: number;
@@ -147,7 +132,6 @@ export interface OrderDto {
   updated_at: string;
 }
 
-// This remains the same for creating an order
 export interface CreateOrderItemDto {
   ProductId: number;
   Quantity: number;
@@ -158,16 +142,12 @@ export interface CreateOrderDto {
   BillingAddressId?: number;
   items: CreateOrderItemDto[];
 }
-//
-// -------------------------
 
-// ... (the rest of your types)
 
 export interface FavoriteItemDto {
   Id: number;
   UserId: number;
   ProductId: number;
   DateAdded: string;
-  // The API might return the full product object nested
   product?: ProductDto;
 }

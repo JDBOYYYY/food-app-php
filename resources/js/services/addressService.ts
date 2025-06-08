@@ -1,12 +1,10 @@
 import apiClient from "./apiClient";
 import type { AddressDto, CreateAddressDto } from "./types";
 
-// This interface describes the paginated response from Laravel for a list
 interface PaginatedResponse<T> {
   data: T[];
 }
 
-// This interface describes the response for a single item
 interface SingleItemResponse<T> {
   data: T;
 }

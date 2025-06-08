@@ -1,6 +1,5 @@
 <template>
     <div class="flex min-h-screen">
-        <!-- Left side - Register form -->
         <div class="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
             <div class="w-full max-w-md space-y-8">
                 <div>
@@ -134,7 +133,6 @@
             </div>
         </div>
 
-        <!-- Right side - Image -->
         <div class="hidden lg:block lg:w-1/2 bg-gradient-to-br from-gray-700 to-gray-800 relative overflow-hidden">
             <div class="absolute inset-0 flex items-center justify-center">
                 <img
