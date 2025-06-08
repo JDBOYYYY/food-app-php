@@ -22,7 +22,7 @@
             item.isOpen ? 'bg-green-500 text-white' : 'bg-red-500 text-white',
           ]"
         >
-          {{ item.isOpen ? 'Open' : 'Closed' }}
+          {{ item.isOpen ? "Open" : "Closed" }}
         </span>
         <span
           v-if="item.promoLabel"
@@ -69,7 +69,9 @@
         <div class="flex items-center gap-4">
           <div class="flex items-center gap-1">
             <Star :size="16" class="text-yellow-400 fill-yellow-400" />
-            <span class="text-sm font-medium">{{ item.rating?.toFixed(1) }}</span>
+            <span class="text-sm font-medium">{{
+              item.rating?.toFixed(1)
+            }}</span>
           </div>
           <div class="flex items-center gap-1 text-gray-600">
             <Clock :size="16" />
@@ -88,11 +90,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import { useRouter } from 'vue-router';
-import { Heart, Star, Clock } from 'lucide-vue-next';
-import { useAuthStore } from '../stores/auth';
-import { favoriteService } from '../services/index';
+import { ref, computed, watch } from "vue";
+import { useRouter } from "vue-router";
+import { Heart, Star, Clock } from "lucide-vue-next";
+import { useAuthStore } from "../stores/auth";
 
 export interface RestaurantListItemProps {
   id: number;
@@ -111,10 +112,10 @@ export interface RestaurantListItemProps {
 
 const props = defineProps<{
   item: RestaurantListItemProps;
-  onToggleFavorite?: (itemId: number, newStatus: boolean) => Promise<void>; // The '?' makes it optional
+  onToggleFavorite?: (itemId: number, newStatus: boolean) => Promise<void>;
 }>();
 
-const emit = defineEmits(['press']);
+const emit = defineEmits(["press"]);
 const router = useRouter();
 const auth = useAuthStore();
 
@@ -128,51 +129,41 @@ watch(
   },
 );
 
-const defaultImage = '/images/placeholder-restaurant.png';
+const defaultImage = "/images/placeholder-restaurant.png";
 const imageSource = computed(() =>
-  props.item.imageUrl && props.item.imageUrl.startsWith('http')
+  props.item.imageUrl && props.item.imageUrl.startsWith("http")
     ? props.item.imageUrl
     : defaultImage,
 );
 
 const onPress = () => {
-  emit('press', props.item.id);
+  emit("press", props.item.id);
 };
 
 const handleFavoritePress = async () => {
   if (!auth.isAuthenticated) {
     if (
       confirm(
-        'You must be logged in to add favorites. Would you like to go to the login page?',
+        "You must be logged in to add favorites. Would you like to go to the login page?",
       )
     ) {
-      router.push('/login');
+      router.push("/login");
     }
-    if (isLoadingFavorite.value || !props.onToggleFavorite) return;
-
-    isLoadingFavorite.value = true;
     return;
   }
 
-  if (isLoadingFavorite.value) return;
-  isLoadingFavorite.value = true;
+  if (isLoadingFavorite.value || !props.onToggleFavorite) return;
 
+  isLoadingFavorite.value = true;
   const newStatus = !isFavoriteLocal.value;
 
   try {
-    // 2. Call the real API service
-    if (newStatus) {
-      await favoriteService.addRestaurantFavorite(props.item.id);
-    } else {
-      await favoriteService.removeRestaurantFavorite(props.item.id);
-    }
-    // 3. Update the local state only on success
+    // Call the function passed from the parent component
+    await props.onToggleFavorite(props.item.id, newStatus);
     isFavoriteLocal.value = newStatus;
   } catch (error: any) {
-    console.error('Failed to toggle favorite:', error);
-    alert(`Error: ${error.message || 'Could not update favorites.'}`);
-    // Note: We don't revert the UI here, assuming the API is the source of truth.
-    // A better approach would be to refetch the user's favorites to sync state.
+    console.error("Failed to toggle favorite:", error);
+    alert(`Error: ${error.message || "Could not update favorites."}`);
   } finally {
     isLoadingFavorite.value = false;
   }

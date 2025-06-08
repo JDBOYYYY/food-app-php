@@ -45,17 +45,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { restaurantService } from '../services/index';
-import { useCartStore } from '../stores/cart';
-import { useAuthStore } from '../stores/auth';
-import type { ProductDto, RestaurantDetailDto } from '../services/types';
+import { ref, computed, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { restaurantService, favoriteService } from "../services/index";
+import { useCartStore } from "../stores/cart";
+import { useAuthStore } from "../stores/auth";
+import type { ProductDto, RestaurantDetailDto } from "../services/types";
 
 // Import the new components
-import RestaurantHero from '../components/restaurant/RestaurantHero.vue';
-import MenuList from '../components/restaurant/MenuList.vue';
-import OrderSummary from '../components/restaurant/OrderSummary.vue';
+import RestaurantHero from "../components/restaurant/RestaurantHero.vue";
+import MenuList from "../components/restaurant/MenuList.vue";
+import OrderSummary from "../components/restaurant/OrderSummary.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -92,8 +92,8 @@ const updateQuantity = (productId: string, newQuantity: number) => {
 
 const toggleFavorite = async () => {
   if (!auth.isAuthenticated) {
-    if (confirm('You must be logged in to add favorites. Go to login?')) {
-      router.push('/login');
+    if (confirm("You must be logged in to add favorites. Go to login?")) {
+      router.push("/login");
     }
     return;
   }
@@ -102,7 +102,9 @@ const toggleFavorite = async () => {
   const newStatus = !restaurant.value.isFavorite;
   try {
     // This would call a real service in the future
-    console.log(`Toggling favorite for ${restaurant.value.Id} to ${newStatus}`);
+    console.log(
+      `Toggling favorite for ${restaurant.value.Id} to ${newStatus}`,
+    );
     restaurant.value.isFavorite = newStatus;
   } catch (e: any) {
     alert(`Error: ${e.message}`);
@@ -112,17 +114,16 @@ const toggleFavorite = async () => {
 onMounted(async () => {
   const restaurantId = Number(route.params.id);
   if (isNaN(restaurantId)) {
-    error.value = 'Invalid Restaurant ID';
+    error.value = "Invalid Restaurant ID";
     isLoading.value = false;
     return;
   }
 
   try {
-    restaurant.value = await restaurantService.getRestaurantPageData(
-      restaurantId,
-    );
+    restaurant.value =
+      await restaurantService.getRestaurantPageData(restaurantId);
   } catch (e: any) {
-    error.value = e.message || 'Failed to load restaurant details.';
+    error.value = e.message || "Failed to load restaurant details.";
   } finally {
     isLoading.value = false;
   }
@@ -146,7 +147,7 @@ const handleToggleProductFavorite = async (
       await favoriteService.removeProductFavorite(productId);
     }
   } catch (e) {
-    console.error('Failed to update product favorite status:', e);
+    console.error("Failed to update product favorite status:", e);
     if (product) product.isFavorite = !newStatus; // Revert on error
   }
 };

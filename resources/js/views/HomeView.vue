@@ -34,7 +34,7 @@
           <h2 class="text-2xl font-bold text-gray-900">Browse by Category</h2>
         </div>
       </div>
-    
+
       <!-- Changed from horizontal scroll to flex wrap -->
       <div class="container mx-auto px-4">
         <div
@@ -56,12 +56,15 @@
           >
             All
           </button>
-        
+
           <!-- The rest of the category buttons - now toggleable -->
           <button
             v-for="category in categories"
             :key="category.Id"
-            @click="selectedCategory = selectedCategory === category.Id ? null : category.Id"
+            @click="
+              selectedCategory =
+                selectedCategory === category.Id ? null : category.Id
+            "
             role="tab"
             :aria-selected="selectedCategory === category.Id"
             :class="[
@@ -140,20 +143,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { Search, MapPin, Filter } from 'lucide-vue-next';
-import { restaurantService } from '../services/index';
-import RestaurantListItem from '../components/RestaurantListItem.vue';
-import type { RestaurantListItemProps } from '../components/RestaurantListItem.vue';
+import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { Search } from "lucide-vue-next";
+import { restaurantService, favoriteService } from "../services/index";
+import { useAuthStore } from "../stores/auth";
+import RestaurantListItem from "../components/RestaurantListItem.vue";
+import type { RestaurantListItemProps } from "../components/RestaurantListItem.vue";
 
 const router = useRouter();
+const auth = useAuthStore();
 const allRestaurants = ref<RestaurantListItemProps[]>([]);
 const categories = ref<any[]>([]);
 const isLoading = ref(true);
 const error = ref<string | null>(null);
 
-const searchQuery = ref('');
+const searchQuery = ref("");
 const selectedCategory = ref<number | null>(null);
 
 const filteredRestaurants = computed(() => {
@@ -162,7 +167,7 @@ const filteredRestaurants = computed(() => {
       .toLowerCase()
       .includes(searchQuery.value.toLowerCase());
     const restaurantCategoryNames =
-      restaurant.cuisineType?.split(', ').map((c) => c.toLowerCase()) || [];
+      restaurant.cuisineType?.split(", ").map((c) => c.toLowerCase()) || [];
     const selectedCategoryName = categories.value
       .find((c) => c.Id === selectedCategory.value)
       ?.Name.toLowerCase();
@@ -179,15 +184,34 @@ const navigateToRestaurant = (restaurantId: number) => {
 };
 
 const clearFilters = () => {
-  searchQuery.value = '';
+  searchQuery.value = "";
   selectedCategory.value = null;
 };
 
-const handleToggleFavorite = async (restaurantId: number, newStatus: boolean) => {
+const handleToggleFavorite = async (
+  restaurantId: number,
+  newStatus: boolean,
+) => {
+  if (!auth.isAuthenticated) {
+    if (confirm("You must be logged in to add favorites. Go to login?")) {
+      router.push("/login");
+    }
+    return;
+  }
+
   const restaurant = allRestaurants.value.find((r) => r.id === restaurantId);
-  if (restaurant) {
+  if (!restaurant) return;
+
+  try {
+    if (newStatus) {
+      await favoriteService.addRestaurantFavorite(restaurantId);
+    } else {
+      await favoriteService.removeRestaurantFavorite(restaurantId);
+    }
     restaurant.isFavorite = newStatus;
-    await restaurantService.toggleFavorite(restaurantId, newStatus);
+  } catch (e: any) {
+    console.error("Failed to toggle favorite:", e);
+    alert(`Error: ${e.message || "Could not update favorites."}`);
   }
 };
 
@@ -199,8 +223,8 @@ onMounted(async () => {
     allRestaurants.value = data.restaurants;
     categories.value = data.categories;
   } catch (e: any) {
-    error.value = 'Could not load data. Please try again later.';
-    console.error('Failed to fetch home page data:', e);
+    error.value = "Could not load data. Please try again later.";
+    console.error("Failed to fetch home page data:", e);
   } finally {
     isLoading.value = false;
   }
