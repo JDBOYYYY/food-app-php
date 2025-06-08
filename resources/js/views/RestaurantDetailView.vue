@@ -82,6 +82,7 @@ const addToBasket = (product: ProductDto) => {
     name: product.Name,
     price: product.Price,
     restaurantId: restaurant.value.Id,
+    restaurantName: restaurant.value.Name, // <-- ADDED RESTAURANT NAME
     image: product.ImageUrl,
   });
 };

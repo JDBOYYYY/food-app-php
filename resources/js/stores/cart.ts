@@ -8,12 +8,14 @@ export interface CartItem {
   quantity: number;
   image?: any;
   restaurantId: number;
+  restaurantName: string; // <-- ADDED
 }
 
 export const useCartStore = defineStore("cart", () => {
   const items = ref<CartItem[]>(
     JSON.parse(localStorage.getItem("cartItems") || "[]"),
   );
+  const isFlyoutOpen = ref(false);
 
   watch(
     items,
@@ -32,6 +34,18 @@ export const useCartStore = defineStore("cart", () => {
   const getCartRestaurantId = computed(() =>
     items.value.length > 0 ? items.value[0].restaurantId : null,
   );
+  // NEW COMPUTED PROPERTY
+  const getCartRestaurantName = computed(() =>
+    items.value.length > 0 ? items.value[0].restaurantName : null,
+  );
+
+  function openFlyout() {
+    isFlyoutOpen.value = true;
+  }
+
+  function closeFlyout() {
+    isFlyoutOpen.value = false;
+  }
 
   function canAddToCart(productRestaurantId: number): boolean {
     if (items.value.length === 0) return true;
@@ -79,9 +93,13 @@ export const useCartStore = defineStore("cart", () => {
 
   return {
     items,
+    isFlyoutOpen,
     itemCount,
     totalPrice,
     getCartRestaurantId,
+    getCartRestaurantName, // <-- EXPORTED
+    openFlyout,
+    closeFlyout,
     canAddToCart,
     addToCart,
     updateQuantity,

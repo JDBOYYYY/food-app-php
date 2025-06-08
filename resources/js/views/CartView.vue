@@ -30,6 +30,12 @@
       <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <!-- Cart Items List -->
         <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
+          <!-- RESTAURANT NAME HEADER -->
+          <div v-if="cart.getCartRestaurantName" class="mb-6 pb-4 border-b">
+            <h3 class="text-xl font-bold text-gray-800">
+              Order from: {{ cart.getCartRestaurantName }}
+            </h3>
+          </div>
           <div class="space-y-4">
             <div
               v-for="item in cart.items"
@@ -37,7 +43,10 @@
               class="flex items-center gap-4 py-4 border-b border-gray-100 last:border-b-0"
             >
               <img
-                :src="item.image || 'https://placehold.co/100x100/e2e8f0/4a5568?text=Item'"
+                :src="
+                  item.image ||
+                  'https://placehold.co/100x100/e2e8f0/4a5568?text=Item'
+                "
                 :alt="item.name"
                 class="h-16 w-16 rounded-lg object-cover"
               />
@@ -115,11 +124,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-vue-next';
-import { useCartStore } from '../stores/cart';
-import { useAuthStore } from '../stores/auth';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { Minus, Plus, Trash2, ShoppingBag } from "lucide-vue-next";
+import { useCartStore } from "../stores/cart";
+import { useAuthStore } from "../stores/auth";
 
 const router = useRouter();
 const cart = useCartStore();
@@ -130,12 +139,12 @@ const deliveryFee = ref(5.99);
 const proceedToCheckout = () => {
   if (!auth.isAuthenticated) {
     // If user is not logged in, prompt them to log in to continue
-    if (confirm('You must be logged in to proceed. Go to login page?')) {
-      router.push('/login');
+    if (confirm("You must be logged in to proceed. Go to login page?")) {
+      router.push("/login");
     }
   } else {
     // If user is logged in, take them to the checkout page
-    router.push('/checkout');
+    router.push("/checkout");
   }
 };
 </script>
