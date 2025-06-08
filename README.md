@@ -1,61 +1,102 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# FoodApp - Food Delivery Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is a full-stack food delivery application built with a Laravel 11 backend API and a Vue 3 frontend. The entire development environment is containerized using Docker for easy setup and consistency.
 
-## About Laravel
+## Key Technologies
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   **Backend:** Laravel 11 (PHP 8.2)
+-   **Frontend:** Vue 3 (Composition API), Vite, Pinia, Vue Router
+-   **Styling:** Tailwind CSS
+-   **Database:** Microsoft SQL Server
+-   **Environment:** Docker & Docker Compose
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Prerequisites
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Before you begin, ensure you have the following installed on your system:
+-   [Docker](https://www.docker.com/products/docker-desktop/)
+-   [Docker Compose](https://docs.docker.com/compose/install/)
+-   A code editor (e.g., Visual Studio Code)
+-   A terminal or command-line interface
+-   A database management tool that can connect to MS SQL Server (e.g., [Azure Data Studio](https://azure.microsoft.com/en-us/products/data-studio) or [DBeaver](https://dbeaver.io/))
 
-## Learning Laravel
+## Getting Started: Installation & Setup
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Follow these steps to get the application running locally.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 1. Clone the Repository
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+First, clone this repository to your local machine.
 
-## Laravel Sponsors
+```bash
+git clone 
+cd foodapp-php
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 2. Configure Environment Variables
 
-### Premium Partners
+The application uses a `.env` file for configuration. A `docker-compose.yml` file is also included which relies on these variables.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1.  Create a `.env` file by copying the example file:
+    ```bash
+    cp .env.example .env
+    ```
 
-## Contributing
+### 3. Build and Start the Containers
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Run the following command to build the Docker images and start the application containers in the background.
 
-## Code of Conduct
+```bash
+docker compose up -d --build
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+This will start two services: `laravel_app` (the web application) and `db` (the MS SQL Server database).
 
-## Security Vulnerabilities
+### 4. Create the Database (First Time Only)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**ZA PIERWSZYM RAZEM** (ON THE FIRST RUN), the database container will start, but the `FoodApiDb` database required by the application will not exist yet. You must create it manually.
 
-## License
+1.  Open your database management tool (e.g., Azure Data Studio).
+2.  Create a new connection with the following details:
+    -   **Server:** `localhost`
+    -   **Port:** `1433`
+    -   **Authentication type:** SQL Login
+    -   **User:** `sa`
+    -   **Password:** The password you set for `SA_PASSWORD` in your `.env` file.
+3.  Connect to the server.
+4.  Open a new query window and run the following SQL command to create the database:
+    ```sql
+    CREATE DATABASE FoodApiDb;
+    ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 5. Run Database Migrations & Seeding
+
+Now that the database exists, you need to create the application's tables and populate them with initial data (users, restaurants, products, etc.).
+
+1.  Enter the `laravel_app` container's shell:
+    ```bash
+    docker compose exec laravel_app bash
+    ```
+2.  Inside the container, run the Laravel `migrate` and `seed` command:
+    ```bash
+    php artisan migrate --seed
+    ```
+    This will set up the entire database schema and add all the necessary sample data.
+
+### 6. Install Frontend Dependencies
+
+The final step is to install the Node.js packages required for the Vue.js frontend.
+```bash
+npm install
+```
+
+## Running the Application
+
+You're all set! The application is now running.
+```bash
+npm run dev
+```
+
+-   **Frontend & Backend:** Open your web browser and navigate to:
+    [**http://localhost:8000**](http://localhost:8000)
+
+The Laravel application serves the Vue frontend, and the Vite server provides Hot Module Replacement (HMR) for a smooth development experience. Any changes you make to the Vue components will be reflected instantly in your browser.
