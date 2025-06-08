@@ -129,21 +129,26 @@ import { useRouter } from "vue-router";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-vue-next";
 import { useCartStore } from "../stores/cart";
 import { useAuthStore } from "../stores/auth";
+import { useModalStore } from "../stores/modals";
 
 const router = useRouter();
 const cart = useCartStore();
 const auth = useAuthStore();
+const modal = useModalStore();
 
 const deliveryFee = ref(5.99);
 
-const proceedToCheckout = () => {
+const proceedToCheckout = async () => {
   if (!auth.isAuthenticated) {
-    // If user is not logged in, prompt them to log in to continue
-    if (confirm("You must be logged in to proceed. Go to login page?")) {
+    const confirmed = await modal.showConfirm({
+      title: "Login Required",
+      message: "You must be logged in to proceed to checkout. Go to login page?",
+      confirmText: "Go to Login",
+    });
+    if (confirmed) {
       router.push("/login");
     }
   } else {
-    // If user is logged in, take them to the checkout page
     router.push("/checkout");
   }
 };

@@ -76,27 +76,34 @@
               v-if="showUserMenu"
               class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200"
             >
-              <a
-                href="/profile"
+              <router-link
+                :to="{ path: '/profile', query: { tab: 'personal' } }"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 <User class="inline h-4 w-4 mr-2" />
-                Profile
-              </a>
-              <a
-                href="/orders"
+                Dane Osobowe
+              </router-link>
+              <router-link
+                :to="{ path: '/profile', query: { tab: 'addresses' } }"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                <MapPin class="inline h-4 w-4 mr-2" />
+                Adresy
+              </router-link>
+              <router-link
+                :to="{ path: '/profile', query: { tab: 'orders' } }"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 <Package class="inline h-4 w-4 mr-2" />
-                Orders
-              </a>
-              <a
-                href="/settings"
+                Historia Zamówień
+              </router-link>
+              <router-link
+                :to="{ path: '/profile', query: { tab: 'security' } }"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 <Settings class="inline h-4 w-4 mr-2" />
-                Settings
-              </a>
+                Bezpieczeństwo
+              </router-link>
               <hr class="my-1" />
               <button
                 @click="handleLogout"
@@ -169,6 +176,7 @@ import {
   Package,
   Settings,
   LogOut,
+  MapPin, // <-- IMPORTED MapPin ICON
 } from "lucide-vue-next";
 
 const authStore = useAuthStore();
@@ -185,7 +193,8 @@ const handleLogout = () => {
 };
 
 const handleClickOutside = (event) => {
-  if (!event.target.closest(".relative")) {
+  // Close user menu if clicking outside of it
+  if (showUserMenu.value && !event.target.closest(".relative")) {
     showUserMenu.value = false;
   }
 };

@@ -1,6 +1,6 @@
 <template>
-  <TransitionRoot appear :show="isOpen" as="template">
-    <Dialog as="div" @close="closeModal" class="relative z-50">
+  <TransitionRoot appear :show="modal.isOpen" as="template">
+    <Dialog as="div" @close="modal.closeModal" class="relative z-50">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -10,11 +10,13 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-black/30" />
+        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" />
       </TransitionChild>
 
       <div class="fixed inset-0 overflow-y-auto">
-        <div class="flex min-h-full items-center justify-center p-4 text-center">
+        <div
+          class="flex min-h-full items-center justify-center p-4 text-center"
+        >
           <TransitionChild
             as="template"
             enter="duration-300 ease-out"
@@ -29,31 +31,31 @@
             >
               <DialogTitle
                 as="h3"
-                class="text-lg font-medium leading-6 text-gray-900"
+                class="text-lg font-bold leading-6 text-gray-900"
               >
-                Confirm Deletion
+                {{ modal.options?.title }}
               </DialogTitle>
               <div class="mt-2">
                 <p class="text-sm text-gray-500">
-                  Are you sure you want to delete this item? This action cannot
-                  be undone.
+                  {{ modal.options?.message }}
                 </p>
               </div>
 
-              <div class="mt-4 flex justify-end space-x-2">
+              <div class="mt-6 flex justify-end space-x-3">
                 <button
+                  v-if="modal.options?.type === 'confirm'"
                   type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none"
-                  @click="closeModal"
+                  class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none"
+                  @click="modal.resolvePromise(false)"
                 >
-                  Cancel
+                  {{ modal.options?.cancelText }}
                 </button>
                 <button
                   type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none"
-                  @click="confirmDelete"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-orange-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-600 focus:outline-none"
+                  @click="modal.resolvePromise(true)"
                 >
-                  Delete
+                  {{ modal.options?.confirmText }}
                 </button>
               </div>
             </DialogPanel>
@@ -64,25 +66,15 @@
   </TransitionRoot>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import {
   TransitionRoot,
   TransitionChild,
   Dialog,
   DialogPanel,
   DialogTitle,
-} from '@headlessui/vue';
+} from "@headlessui/vue";
+import { useModalStore } from "@/stores/modals";
 
-const props = defineProps<{
-  isOpen: boolean;
-}>();
-
-const emit = defineEmits(['close', 'confirm']);
-
-function closeModal() {
-  emit('close');
-}
-function confirmDelete() {
-  emit('confirm');
-}
+const modal = useModalStore();
 </script>

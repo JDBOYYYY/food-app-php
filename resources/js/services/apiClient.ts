@@ -1,5 +1,16 @@
-import { API_URL } from '../constants';
-import { useAuthStore } from '../stores/auth';
+import { API_URL } from "../constants";
+import { useAuthStore } from "../stores/auth";
+
+// A custom error class to hold more details from the API
+export class ApiError extends Error {
+  response: any;
+
+  constructor(message: string, response: any) {
+    super(message);
+    this.name = "ApiError";
+    this.response = response;
+  }
+}
 
 interface ApiClientOptions extends RequestInit {
   // No need for authToken here, we'll get it from the store
@@ -11,11 +22,11 @@ async function apiClient<T>(
 ): Promise<T> {
   const auth = useAuthStore();
   const headers = new Headers(options.headers || {});
-  headers.append('Content-Type', 'application/json');
-  headers.append('Accept', 'application/json');
+  headers.append("Content-Type", "application/json");
+  headers.append("Accept", "application/json");
 
   if (auth.token) {
-    headers.append('Authorization', `Bearer ${auth.token}`);
+    headers.append("Authorization", `Bearer ${auth.token}`);
   }
 
   const response = await fetch(`${API_URL}${endpoint}`, {
@@ -31,14 +42,12 @@ async function apiClient<T>(
 
   if (!response.ok) {
     const message = data.message || `API Error (${response.status})`;
-    throw new Error(message);
+    // Throw our custom error with the full response body
+    throw new ApiError(message, data);
   }
 
-  // Handle Laravel's pagination wrapper if present
-  if (data && typeof data === 'object' && 'data' in data && 'links' in data) {
-    return data.data as T;
-  }
-
+  // REMOVED: The inconsistent auto-unwrapping logic.
+  // The caller is now always responsible for accessing the .data property.
   return data as T;
 }
 

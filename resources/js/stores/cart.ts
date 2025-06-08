@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
+import { useModalStore } from "./modals"; // Import modal store
 
 export interface CartItem {
   id: string;
@@ -8,7 +9,7 @@ export interface CartItem {
   quantity: number;
   image?: any;
   restaurantId: number;
-  restaurantName: string; // <-- ADDED
+  restaurantName: string;
 }
 
 export const useCartStore = defineStore("cart", () => {
@@ -34,7 +35,6 @@ export const useCartStore = defineStore("cart", () => {
   const getCartRestaurantId = computed(() =>
     items.value.length > 0 ? items.value[0].restaurantId : null,
   );
-  // NEW COMPUTED PROPERTY
   const getCartRestaurantName = computed(() =>
     items.value.length > 0 ? items.value[0].restaurantName : null,
   );
@@ -52,13 +52,20 @@ export const useCartStore = defineStore("cart", () => {
     return items.value[0].restaurantId === productRestaurantId;
   }
 
-  function addToCart(product: Omit<CartItem, "quantity">, quantity = 1) {
+  async function addToCart(
+    product: Omit<CartItem, "quantity">,
+    quantity = 1,
+  ) {
+    const modal = useModalStore();
     if (!canAddToCart(product.restaurantId)) {
-      if (
-        confirm(
-          "You can only order from one restaurant at a time. Clear your cart to add this item?",
-        )
-      ) {
+      const confirmed = await modal.showConfirm({
+        title: "Clear your cart?",
+        message:
+          "You can only order from one restaurant at a time. Would you like to clear your current cart to add this item?",
+        confirmText: "Yes, Clear Cart",
+      });
+
+      if (confirmed) {
         items.value = [{ ...product, quantity }];
       }
       return;
@@ -97,7 +104,7 @@ export const useCartStore = defineStore("cart", () => {
     itemCount,
     totalPrice,
     getCartRestaurantId,
-    getCartRestaurantName, // <-- EXPORTED
+    getCartRestaurantName,
     openFlyout,
     closeFlyout,
     canAddToCart,

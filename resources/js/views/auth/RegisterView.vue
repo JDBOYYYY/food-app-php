@@ -179,7 +179,10 @@ const handleRegister = async () => {
             password: password.value,
             password_confirmation: password_confirmation.value,
         })
-        alert('Rejestracja zakończona pomyślnie! Zaloguj się.')
+        await modal.showAlert({
+            title: "Registration Successful!",
+            message: "You can now log in with your new account.",
+        });
         await router.push('/login')
     } catch (e: any) {
         error.value = e.message || 'Wystąpił nieznany błąd podczas rejestracji.'

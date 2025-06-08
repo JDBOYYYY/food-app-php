@@ -51,11 +51,13 @@ import { restaurantService, favoriteService } from "../services/index";
 import { useCartStore } from "../stores/cart";
 import { useAuthStore } from "../stores/auth";
 import type { ProductDto, RestaurantDetailDto } from "../services/types";
+import { useModalStore } from "../stores/modals";
 
 // Import the new components
 import RestaurantHero from "../components/restaurant/RestaurantHero.vue";
 import MenuList from "../components/restaurant/MenuList.vue";
 import OrderSummary from "../components/restaurant/OrderSummary.vue";
+const modal = useModalStore();
 
 const route = useRoute();
 const router = useRouter();
@@ -93,7 +95,12 @@ const updateQuantity = (productId: string, newQuantity: number) => {
 
 const toggleFavorite = async () => {
   if (!auth.isAuthenticated) {
-    if (confirm("You must be logged in to add favorites. Go to login?")) {
+    const confirmed = await modal.showConfirm({
+      title: "Login Required",
+      message: "You must be logged in to add favorites. Go to login?",
+      confirmText: "Go to Login",
+    });
+    if (confirmed) {
       router.push("/login");
     }
     return;
